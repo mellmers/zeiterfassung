@@ -1,0 +1,36 @@
+{
+  "name": "zeiterfassung-backend",
+  "version": "0.0.1",
+  "description": "Backend Zeiterfassung PWA",
+  "scripts": {
+    "start": "nodemon --exec babel-node api.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gith ub.com/mellmers/zeiterfassung.git"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/mellmers/zeiterfassung#readme",
+  "author": {
+    "name": "Moritz Ellmers",
+    "email": "info@moritzellmers.de",
+    "url": "https://moritzellmers.de"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.7.5",
+    "@babel/node": "^7.7.4",
+    "@babel/preset-env": "^7.7.6",
+    "nodemon": "^2.0.2"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-jwt": "^5.3.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.8.0",
+    "mongoose-sequence": "^5.2.2",
+    "morgan": "^1.9.1"
+  }
+}

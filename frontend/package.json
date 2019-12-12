@@ -1,0 +1,23 @@
+{
+  "name": "zeiterfassung-frontend",
+  "version": "0.0.1",
+  "description": "Frontend Zeiterfassung PWA",
+  "scripts": {
+    "start": "preact"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mellmers/zeiterfassung.git"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/mellmers/zeiterfassung#readme",
+  "author": {
+    "name": "Moritz Ellmers",
+    "email": "info@moritzellmers.de",
+    "url": "https://moritzellmers.de"
+  },
+  "devDependencies": {},
+  "dependencies": {
+  },
+  "proxy": "http://localhost:3001/"
+}
