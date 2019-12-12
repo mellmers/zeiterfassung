@@ -44,17 +44,19 @@ npm start
 ## Frameworks
 
 ### Onsen UI
-"The most beautiful and efficient way to develop HTML5 hybrid and mobile web apps."
+"The most beautiful and efficient way to develop HTML5 hybrid and mobile web apps." <br/>
 Visit [Onsen UI](https://onsen.io/) for more details & documentation.
 
 ### Preact
-"Fast 3kB alternative to React with the same modern API."
+"Fast 3kB alternative to React with the same modern API." <br/>
 Visit [Preact](https://preactjs.com/) for more configuration & documentation.
 
 ### MongoDB
-"The database for modern applications"
+"The database for modern applications" <br/>
 Visit [MongoDB](https://www.mongodb.com/) for more details and documentation.
 
+<br />
+<br />
 
-### License
+#### License
 This project is licensed under the MIT license, Copyright (c) 2019 [Moritz Ellmers](https://moritzellmers.de). For more information see [LICENSE.md](https://github.com/mellmers/zeiterfassung/blob/master/LICENSE.md).  
