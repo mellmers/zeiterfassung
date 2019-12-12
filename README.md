@@ -58,5 +58,5 @@ Visit [MongoDB](https://www.mongodb.com/) for more details and documentation.
 <br />
 <br />
 
-#### License
+### License
 This project is licensed under the MIT license, Copyright (c) 2019 [Moritz Ellmers](https://moritzellmers.de). For more information see [LICENSE.md](https://github.com/mellmers/zeiterfassung/blob/master/LICENSE.md).  
