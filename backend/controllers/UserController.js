@@ -45,10 +45,10 @@ function authenticate(req, res, next) {
                         }
                     });
                 } else {
-                    res.status(400).json({status: 'error', message: 'Staff number or pin code is incorrect'});
+                    res.status(401).json({status: 'error', message: 'Staff number or pin code is incorrect'});
                 }
             } else {
-                res.status(400).json({status: 'error', message: 'Staff number or pin code is incorrect'});
+                res.status(401).json({status: 'error', message: 'Staff number or pin code is incorrect'});
             }
         });
 }
@@ -58,8 +58,14 @@ function create(req, res, next) {
     let user = {
         familyName: req.body.familyName,
         firstName: req.body.firstName,
-        pinCode: req.body.pinCode
+        pinCode: req.body.pinCode,
+        role: 'Mitarbeiter'
     };
+
+    if (req.body.admin === true || req.body.admin === 'true' || req.body.admin === 1 || req.body.admin === '1') {
+        user.role = 'Administrator';
+    }
+
     UserModel.create(user, (err, user) => {
         if (err) {
             res.status(400).json({
@@ -75,7 +81,7 @@ function create(req, res, next) {
 function getAll(req, res, next) {
     UserModel.find({}, (err, users) => {
         if (err) {
-            res.status(400).json({status: 'error', message: 'Cannot get all users'});
+            res.status(400).json({status: 'error', message: 'Cannot get all users. Reason: ' + err.message || err.errmsg});
         } else if (users) {
             res.json({status: 'success', message: 'Got all users', data: {users: users}});
         }

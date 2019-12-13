@@ -9,6 +9,7 @@ import errorHandler from './utils/errorHandler';
 import mongoose from './utils/database'; //database
 
 import UserController from './controllers/UserController';
+import WorkingTimeController from './controllers/WorkingTimeController';
 
 let app = express();
 
@@ -29,6 +30,7 @@ app.use('/api', jwt());
 
 // api routes
 app.use('/api/users', UserController);
+app.use('/api/working-time', WorkingTimeController);
 
 // global error handler
 app.use(errorHandler);
