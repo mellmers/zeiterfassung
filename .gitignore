@@ -72,3 +72,8 @@ src/config/assets.js
 
 # Ignore sass cache
 .sass-cache
+
+# Preact
+frontend/build
+frontend/*.log
+frontend/*.lock

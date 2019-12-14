@@ -1,14 +1,8 @@
 {
+  "private": true,
   "name": "zeiterfassung-frontend",
-  "version": "0.0.1",
   "description": "Frontend Zeiterfassung PWA",
-  "scripts": {
-    "start": "preact"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mellmers/zeiterfassung.git"
-  },
+  "version": "0.0.1",
   "license": "MIT",
   "homepage": "https://github.com/mellmers/zeiterfassung#readme",
   "author": {
@@ -16,8 +10,39 @@
     "email": "info@moritzellmers.de",
     "url": "https://moritzellmers.de"
   },
-  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://gith ub.com/mellmers/zeiterfassung.git"
+  },
+  "scripts": {
+    "start": "per-env",
+    "start:production": "npm run -s serve",
+    "start:development": "npm run -s dev",
+    "build": "preact build",
+    "serve": "preact build && serve build --single",
+    "dev": "preact watch",
+    "lint": "eslint src",
+    "test": "jest"
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-synacor"
+  },
+  "eslintIgnore": [
+    "build/*"
+  ],
+  "devDependencies": {
+    "eslint": "^6.0.1",
+    "eslint-config-synacor": "^3.0.4",
+    "identity-obj-proxy": "^3.0.0",
+    "per-env": "^1.0.2",
+    "preact-cli": "^3.0.0-rc.6",
+    "preact-render-spy": "^1.2.1",
+    "serve": "^11.1.0"
+  },
   "dependencies": {
+    "preact": "^10.0.1",
+    "preact-render-to-string": "^5.1.0",
+    "preact-router": "^3.0.0"
   },
   "proxy": "http://localhost:3001/"
 }
