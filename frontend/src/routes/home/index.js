@@ -1,11 +1,16 @@
-import { h } from 'preact';
-import style from './style';
+import { Component } from 'preact';
 
-const Home = () => (
-	<div class={style.home}>
-		<h1>Home</h1>
-		<p>This is the Home component.</p>
-	</div>
-);
+import style from './style.scss';
 
-export default Home;
+export default class Home extends Component {
+
+    render(props, state, context) {
+
+        return (
+            <div className={style.home}>
+                <h1>Home</h1>
+                <p>This is the Home component.</p>
+            </div>
+        );
+    }
+}
