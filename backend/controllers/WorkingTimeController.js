@@ -24,9 +24,9 @@ async function create(req, res, next) {
     };
 
     if (req.body.userId && req.user.id) {
-        await UserIsAdmin(req.user.id, res, next, (user) => {
+        await UserIsAdmin(req.user.id, res, next,(user) => {
             workingTime.userId = req.body.userId;
-        });
+        }, 'You are not allowed to save a working time for a different user.');
     }
 
     // Oldenburg: 8.1506953 | 53.1441014
@@ -50,12 +50,17 @@ async function create(req, res, next) {
     });
 }
 
-function getAll(req, res, next) {
-    WorkingTimeModel.find({}, (err, workingTimes) => {
-        if (err) {
-            res.status(400).json({status: 'error', message: 'Cannot get all working times. Reason: ' + err.message || err.errmsg});
-        } else if (workingTimes) {
-            res.json({status: 'success', message: 'Got all working times', data: {workingTimes: workingTimes}});
-        }
+async function getAll(req, res, next) {
+    await UserIsAdmin(req.user.id, res, next, (user) => {
+        WorkingTimeModel.find({}, (err, workingTimes) => {
+            if (err) {
+                res.status(400).json({
+                    status: 'error',
+                    message: 'Cannot get all working times. Reason: ' + err.message || err.errmsg
+                });
+            } else if (workingTimes) {
+                res.json({status: 'success', message: 'Got all working times', data: {workingTimes: workingTimes}});
+            }
+        });
     });
 }
