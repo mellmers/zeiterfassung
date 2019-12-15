@@ -42,9 +42,11 @@
     "serve": "^11.1.0"
   },
   "dependencies": {
+    "onsenui": "^2.10.10",
     "preact": "^10.0.1",
     "preact-render-to-string": "^5.1.0",
-    "preact-router": "^3.0.0"
+    "preact-router": "^3.0.0",
+    "react-onsenui": "^1.11.2"
   },
   "proxy": "http://localhost:8081/"
 }

@@ -1,0 +1,10 @@
+@import '../../style/variables';
+
+.login {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	height: calc(100% - #{$toolbarHeight});
+	height: calc(100vh - #{$toolbarHeight});
+}

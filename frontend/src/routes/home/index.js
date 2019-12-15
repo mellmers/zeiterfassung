@@ -1,4 +1,7 @@
 import { Component } from 'preact';
+import { Page } from 'react-onsenui';
+
+import Toolbar from '../../components/toolbar';
 
 import style from './style.scss';
 
@@ -7,10 +10,9 @@ export default class Home extends Component {
     render(props, state, context) {
 
         return (
-            <div className={style.home}>
+            <Page renderToolbar={() => <Toolbar headline='Home' />}>
                 <h1>Home</h1>
-                <p>This is the Home component.</p>
-            </div>
+            </Page>
         );
     }
 }
