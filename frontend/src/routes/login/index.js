@@ -1,5 +1,6 @@
 import { Component } from 'preact';
 import { Input, Page } from 'react-onsenui';
+import ons from 'onsenui';
 
 import Toolbar from '../../components/toolbar';
 
@@ -19,9 +20,14 @@ export default class Login extends Component {
     handleLogin(e) {
         e.preventDefault();
         const { staffNumber, pinCode } = this.state;
-        console.log('Validate', staffNumber, pinCode);
         if (staffNumber && pinCode) {
-            console.log('TODO: LOGIN', staffNumber, pinCode);
+            console.log('LOGIN: ', staffNumber, pinCode);
+            ons.notification.toast({
+                message: 'Erfolgreich angemeldet',
+                timeout: 3000,
+            });
+        } else {
+            ons.notification.alert('Personalnummer oder Pin falsch!');
         }
     }
 

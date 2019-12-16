@@ -1,6 +1,9 @@
+@import '../../style/variables';
+
 .logo {
   display: block;
-  width: 46px;
-  height: 46px;
-  margin: 5px auto;
+  height: $toolbarHeight;
+  max-height: 100%;
+  width: auto;
+  padding: 5px 12px;
 }

@@ -10,7 +10,8 @@ import Profile from '../routes/profile';
 class Tabs extends Component {
 
 	state = {
-		index: 0
+		index: 0,
+		show: false
 	};
 
 	componentWillMount() {
@@ -18,21 +19,26 @@ class Tabs extends Component {
 		// setTimeout( () => {
 		// 	this.setState({index:1})
 		// }, 1000);
+
+		// Bottom border is wrong at loading, so we wait some milliseconds to show the tab bar
+		setTimeout( () => {
+			this.setState({show:true})
+		}, 250);
 	}
 
 	renderTabs() {
 		return [
 			{
 				content: <Home key='home' navigator={this.props.navigator} />,
-				tab: <Tab key='home' label='Home' icon='md-home' />
+				tab: <Tab key='home' label='Home' icon='fa-home' />
 			},
 			{
 				content: <Profile key='me' navigator={this.props.navigator} user='me' />,
-				tab: <Tab key='me' label='Mein Profil' icon='md-home' />
+				tab: <Tab key='me' label='Mein Profil' icon='fa-user-circle' />
 			},
 			{
 				content: <Profile key='profile' navigator={this.props.navigator} />,
-				tab: <Tab key='profile' label='Profil' icon='md-home' />
+				tab: <Tab key='profile' label='Profil' icon='fa-id-card' />
 			},
 		];
 	}
@@ -40,13 +46,15 @@ class Tabs extends Component {
 	render(props, state, context) {
 		return (
 			<Page>
-				<Tabbar
-					index={state.index}
-					onPreChange={({index}) => this.setState(index)}
-					position='bottom'
-					renderTabs={this.renderTabs.bind(this)}
-					swipeable={true}
-				/>
+				{state.show ? (
+					<Tabbar
+						index={state.index}
+						onPreChange={({index}) => this.setState(index)}
+						position='bottom'
+						renderTabs={this.renderTabs.bind(this)}
+						swipeable={true}
+					/>
+				) : null}
 			</Page>
 		);
 	}
@@ -82,7 +90,8 @@ export default class App extends Component {
 		return (
 			<div id='app'>
 				<Router onChange={this.handleRoute}>
-					<Navigator path='/' renderPage={this.renderPage} initialRoute={{comp: Tabs, props: { key: 'tabs' }}}/>
+					{/*<Navigator path='/' renderPage={this.renderPage} initialRoute={{comp: Tabs, props: { key: 'tabs' }}}/>*/}
+					<Tabs path='/' />
 					<Login path='/login/'/>
 					<Profile path='/profile/' user='me'/>
 					<Profile path='/profile/:user'/>
