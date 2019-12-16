@@ -2,8 +2,6 @@ import { Component, h } from 'preact';
 import { Router, route } from 'preact-router';
 import { List, ListItem, Navigator, Page, Splitter, SplitterContent, SplitterSide, Tab, Tabbar } from 'react-onsenui';
 
-import Header from './header';
-
 // Code-splitting is automated for routes
 import Home from '../routes/home';
 import Login from '../routes/Login';
@@ -83,7 +81,6 @@ export default class App extends Component {
 	render(props, state, context) {
 		return (
 			<div id='app'>
-				{/*<Header />*/}
 				<Router onChange={this.handleRoute}>
 					<Navigator path='/' renderPage={this.renderPage} initialRoute={{comp: Tabs, props: { key: 'tabs' }}}/>
 					<Login path='/login/'/>
