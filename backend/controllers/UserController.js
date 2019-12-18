@@ -30,25 +30,28 @@ function authenticate(req, res, next) {
                     const token = jwt.sign({id: user._id}, process.env.API_SECRET, {expiresIn: expiresIn});
                     res.json({
                         status: 'success',
-                        message: 'Authentication successful',
+                        message: 'Erfolgreich angemeldet',
                         data: {
-                            token: token,
-                            expiresIn: expiresIn,
                             user:  {
+                                token: token,
+                                expiresIn: expiresIn,
+
                                 _id: user._id,
                                 staffNumber: user.staffNumber,
                                 familyName: user.familyName,
                                 firstName: user.firstName,
+                                role: user.role,
+                                invitationId: user.invitationId,
                                 createdAt: user.createdAt,
                                 updatedAt: user.updatedAt
                             }
                         }
                     });
                 } else {
-                    res.status(401).json({status: 'error', message: 'Staff number or pin code is incorrect'});
+                    res.status(401).json({status: 'error', message: 'Personalnummer oder Pin falsch'});
                 }
             } else {
-                res.status(401).json({status: 'error', message: 'Staff number or pin code is incorrect'});
+                res.status(401).json({status: 'error', message: 'Personalnummer oder Pin falsch'});
             }
         });
 }

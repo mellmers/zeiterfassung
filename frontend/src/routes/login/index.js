@@ -4,13 +4,16 @@ import ons from 'onsenui';
 
 import Toolbar from '../../components/toolbar';
 
+import API from '../../utils/API';
+
 import style from './style.scss';
 
 export default class Login extends Component {
 
     state = {
         staffNumber: null,
-        pinCode: null
+        pinCode: null,
+        disableLogin: false
     };
 
     handleInputChange(e) {
@@ -20,14 +23,17 @@ export default class Login extends Component {
     handleLogin(e) {
         e.preventDefault();
         const { staffNumber, pinCode } = this.state;
+
+        this.setState({ disableLogin: true });
+
         if (staffNumber && pinCode) {
-            console.log('LOGIN: ', staffNumber, pinCode);
-            ons.notification.toast({
-                message: 'Erfolgreich angemeldet',
-                timeout: 3000,
-            });
-        } else {
-            ons.notification.alert('Personalnummer oder Pin falsch!');
+            API.getInstance().login(staffNumber, pinCode)
+                .then( response => {
+                    if (this.props.onLogin) this.props.onLogin(response.data.user);
+                }, ()=>{} )
+                .then( () => {
+                    this.setState({ disableLogin: false });
+                });
         }
     }
 
@@ -65,7 +71,7 @@ export default class Login extends Component {
                         </p>
 
                         <p>
-                            <button className='button--material button' type='submit'>Anmelden</button>
+                            <button className='button--material button' type='submit' disabled={state.disableLogin}>Anmelden</button>
                         </p>
                     </form>
                 </div>

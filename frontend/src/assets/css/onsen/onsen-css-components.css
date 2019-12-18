@@ -1,0 +1,1036 @@
+/* Custom Theme for Onsen UI 2.10.10 */
+
+/*!
+ * Copyright 2013-2017 ASIAL CORPORATION
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+/*!
+ * Copyright 2012 Adobe Systems Inc.;
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ */
+
+:root {
+  /* variables for iOS components */
+
+  /* variables for Material Design components */
+
+  /* others */
+}
+html {
+  height: 100%;
+  width: 100%;
+}
+body {
+  position: absolute;
+  overflow: hidden;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  padding: 0;
+  margin: 0;
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+}
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+input, textarea, select {
+  -webkit-user-select: auto;
+      -ms-user-select: auto;
+          user-select: auto;
+  -moz-user-select: text;
+  -webkit-touch-callout: none;
+}
+a, button, input, textarea, select {
+  touch-action: manipulation;
+}
+input:active, input:focus, textarea:active, textarea:focus, select:active, select:focus {
+  outline: none;
+}
+h1 {
+  font-size: 36px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4, h5, h6 {
+  font-size: 18px;
+}
+:root {
+}
+/*~
+  name: Toolbar
+  category: Toolbar
+  elements: ons-toolbar
+  markup: |
+    <div class="toolbar">
+      <div class="toolbar__center">Navigation Bar</div>
+    </div>
+*/
+.toolbar {
+  font-family: -apple-system, 'Helvetica Neue', 'Helvetica', 'Arial', 'Lucida Grande', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  box-sizing: border-box;
+  background-clip: padding-box;
+  white-space: nowrap;
+  overflow: hidden;
+  word-spacing: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  line-height: normal;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  z-index: 2;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+          align-items: stretch;
+  -webkit-flex-wrap: nowrap;
+          flex-wrap: nowrap;
+  height: 44px;
+  padding-left: 0;
+  padding-right: 0;
+  background: #2979FF;
+  color: #ffffff;
+  color: rgba(255, 255, 255, 1);
+  box-shadow: none;
+  font-weight: 400;
+  width: 100%;
+  white-space: nowrap;
+  border-bottom: none;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-image: linear-gradient(0deg, #b2b2b2, #b2b2b2 100%);
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
+
+  .toolbar {
+    background-image: linear-gradient(0deg, #b2b2b2, #b2b2b2 50%, transparent 50%);
+  }
+}
+.toolbar__bg {
+  background: #2979FF;
+}
+.toolbar__item {
+  box-sizing: border-box;
+  background-clip: padding-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  line-height: normal;
+  height: 44px;
+  overflow: visible;
+  display: block;
+  vertical-align: middle;
+}
+.toolbar__left {
+  box-sizing: border-box;
+  background-clip: padding-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  line-height: normal;
+  max-width: 50%;
+  width: 27%;
+  text-align: left;
+  line-height: 44px;
+}
+.toolbar__right {
+  box-sizing: border-box;
+  background-clip: padding-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  line-height: normal;
+  max-width: 50%;
+  width: 27%;
+  text-align: right;
+  line-height: 44px;
+}
+.toolbar__center {
+  box-sizing: border-box;
+  background-clip: padding-box;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  line-height: normal;
+  width: 46%;
+  text-align: center;
+  line-height: 44px;
+  font-size: 17px;
+  font-weight: 500;
+  color: #ffffff;
+  color: rgba(255, 255, 255, 1);
+}
+.toolbar__title {
+  line-height: 44px;
+  font-size: 17px;
+  font-weight: 500;
+  color: #ffffff;
+  color: rgba(255, 255, 255, 1);
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+.toolbar__center:first-child:last-child {
+  width: 100%;
+}
+/*~
+  name: Toolbar Item
+  category: Toolbar
+  elements: ons-toolbar ons-toolbar-button
+  markup: |
+    <div class="toolbar">
+      <div class="toolbar__left">
+        <span class="toolbar-button">
+          <i class="ion-navicon" style="font-size:32px; vertical-align:-6px;"></i>
+        </span>
+      </div>
+
+      <div class="toolbar__center">
+        Navigation Bar
+      </div>
+
+      <div class="toolbar__right">
+        <span class="toolbar-button">Label</span>
+      </div>
+    </div>
+*/
+/*~
+  name: Toolbar with Outline Button
+  category: Toolbar
+  elements: ons-toolbar ons-toolbar-button
+  markup: |
+    <!-- Prerequisite=This example use ionicons(http://ionicons.com) to display icons. -->
+    <div class="toolbar">
+      <div class="toolbar__left">
+        <span class="toolbar-button toolbar-button--outline">
+          <i class="ion-navicon" style="font-size:32px; vertical-align:-6px;"></i>
+        </span>
+      </div>
+
+      <div class="toolbar__center">
+        Title
+      </div>
+
+      <div class="toolbar__right">
+        <span class="toolbar-button toolbar-button--outline">Button</span>
+      </div>
+    </div>
+*/
+/*~
+  name: Bottom Bar
+  category: Toolbar
+  elements: ons-bottom-toolbar
+  markup: |
+    <div class="bottom-bar">
+      <div class="bottom-bar__line-height" style="text-align:center">Bottom Toolbar</div>
+    </div>
+*/
+.bottom-bar {
+  font-family: -apple-system, 'Helvetica Neue', 'Helvetica', 'Arial', 'Lucida Grande', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-weight: 400;
+  box-sizing: border-box;
+  background-clip: padding-box;
+  white-space: nowrap;
+  overflow: hidden;
+  word-spacing: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: none;
+  line-height: normal;
+  cursor: default;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  z-index: 2;
+  display: block;
+  height: 44px;
+  padding-left: 0;
+  padding-right: 0;
+  background: #2979FF;
+  color: #ffffff;
+  color: rgba(255, 255, 255, 1);
+  box-shadow: none;
+  font-weight: 400;
+  border-bottom: none;
+  border-top: 1px solid #b2b2b2;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  border-top: none;
+  background-size: 100% 1px;
+  background-repeat: no-repeat;
+  background-position: top;
+  background-image: linear-gradient(180deg, #b2b2b2, #b2b2b2 100%);
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi), (min-resolution: 2dppx) {
+
+  .bottom-bar {
+    background-image: linear-gradient(180deg, #b2b2b2, #b2b2b2 50%, transparent 50%);
+  }
+}
+.bottom-bar__line-height {
+  line-height: 44px;
+  padding-bottom: 0;
+  padding-top: 0;
+}
+.bottom-bar--aligned {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: nowrap;
+          flex-wrap: nowrap;
+  line-height: 44px;
+}
+.bottom-bar--transparent {
+  background-color: transparent;
+  background-image: none;
+  border: none;
+}
+/*~
+  name: Toolbar with Segment
+  category: Toolbar
+  elements: ons-toolbar
+  markup: |
+    <div class="toolbar">
+      <div class="toolbar__center">
+        <div class="segment" style="width:200px;margin:7px 50px;">
+          <div class="segment__item">
+            <input type="radio" class="segment__input" name="navi-segment-a" checked>
+            <div class="segment__button">One</div>
+          </div>
+
+          <div class="segment__item">
+            <input type="radio" class="segment__input" name="navi-segment-a">
+            <div class="segment__button">Two</div>
+          </div>
+        </div>
+      </div>
+    </div>
+*/
+/*~
+  name: Material Toolbar
+  category: Toolbar
+  elements: ons-toolbar
+  markup: |
+    <div class="toolbar toolbar--material">
+      <div class="toolbar__center toolbar--material__center">
+        Title
+      </div>
+    </div>
+*/
+.toolbar--material {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-wrap: nowrap;
+          flex-wrap: nowrap;
+  -webkit-box-pack: justify;
+  -webkit-justify-content: space-between;
+          justify-content: space-between;
+  height: 56px;
+  border-bottom: 0;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, .3);
+  padding: 0;
+  background-color: #2979FF;
+  background-size: 0;
+}
+/*~
+  name: No Shadow Toolbar
+  category: Toolbar
+  elements: ons-toolbar
+  markup: |
+    <div class="toolbar toolbar--noshadow">
+      <div class="toolbar__left">
+        <span class="toolbar-button">
+          <i class="ion-navicon" style="font-size:32px; vertical-align:-6px;"></i>
+        </span>
+      </div>
+      <div class="toolbar__center">
+        Navigation Bar
+      </div>
+      <div class="toolbar__right">
+        <span class="toolbar-button">Label</span>
+      </div>
+    </div>
+*/
+.toolbar--noshadow {
+  box-shadow: none;
+  background-image: none;
+  border-bottom: none;
+}
+.toolbar--material__left, .toolbar--material__right {
+  font-family: 'Roboto', 'Noto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 400;
+  font-size: 20px;
+  font-weight: 500;
+  color: #ffffff;
+  color: rgba(255, 255, 255, 1);
+  height: 56px;
+  min-width: 72px;
+  width: auto;
+  line-height: 56px;
+}
+.toolbar--material__center {
+  font-family: 'Roboto', 'Noto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 400;
+  font-size: 20px;
+  font-weight: 500;
+  color: #ffffff;
+  color: rgba(255, 255, 255, 1);
+  height: 56px;
+  width: auto;
+  -webkit-box-flex: 1;
+  -webkit-flex-grow: 1;
+          flex-grow: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  line-height: 56px;
+}
+.toolbar--material__center:first-child {
+  margin-left: 16px;
+}
+.toolbar--material__center:last-child {
+  margin-right: 16px;
+}
+.toolbar--material__left:empty, .toolbar--material__right:empty {
+  min-width: 16px;
+}
+/*~
+  name: Material Toolbar with Icons
+  category: Toolbar
+  elements: ons-toolbar
+  markup: |
+    <div class="toolbar toolbar--material">
+      <div class="toolbar__left toolbar--material__left">
+        <span class="toolbar-button toolbar-button--material">
+          <i class="zmdi zmdi-menu"></i>
+        </span>
+      </div>
+      <div class="toolbar__center toolbar--material__center">
+        Title
+      </div>
+      <div class="toolbar__right toolbar--material__right">
+        <span class="toolbar-button toolbar-button--material">
+          <i class="zmdi zmdi-search"></i>
+        </span>
+        <span class="toolbar-button toolbar-button--material">
+          <i class="zmdi zmdi-favorite"></i>
+        </span>
+        <span class="toolbar-button toolbar-button--material">
+          <i class="zmdi zmdi-more-vert"></i>
+        </span>
+      </div>
+    </div>
+*/
+/*~
+  name: Transparent Toolbar
+  category: Toolbar
+  elements: ons-toolbar
+  markup: |
+    <div class="toolbar toolbar--transparent">
+      <div class="toolbar__left">
+        <span class="toolbar-button">
+          <i class="ion-navicon" style="font-size:32px; vertical-align:-6px;"></i>
+        </span>
+      </div>
+      <div class="toolbar__center">
+        Navigation Bar
+      </div>
+      <div class="toolbar__right">
+        <span class="toolbar-button">Label</span>
+      </div>
+    </div>
+*/
+.toolbar--transparent {
+  background-color: transparent;
+  box-shadow: none;
+  background-image: none;
+  border-bottom: none;
+}
+/* ------- */
+/* Default */
+/* ------- */
+/* All toolbar */
+.toolbar {
+  top: 0;
+  box-sizing: border-box;
+  padding-top: 0;
+}
+.bottom-bar {
+  bottom: 0;
+  box-sizing: border-box;
+  padding-bottom: 0;
+}
+/* All page__background with a ordinal toolbar */
+.toolbar+.page__background {
+  top: 44px;
+}
+/* All page__content without toolbars */
+.page__content {
+  top: 0;
+  padding-top: 0;
+
+  bottom: 0;
+}
+/* All page__content with a toolbar */
+.toolbar+.page__background+.page__content {
+  top: 44px;
+  padding-top: 0;
+}
+/* All page__content with a bottom-bar */
+.page-with-bottom-toolbar > .page__content {
+  bottom: 44px;
+}
+/* -------- */
+/* Material */
+/* -------- */
+/* All page__background with a material toolbar */
+.toolbar.toolbar--material+.page__background {
+  top: 56px;
+}
+/* All page__content with a material toolbar */
+.toolbar.toolbar--material+.page__background+.page__content {
+  top: 56px;
+  padding-top: 0;
+}
+/* -------- */
+/*  Others  */
+/* -------- */
+/* All page__background with a transparent toolbar */
+.toolbar.toolbar--transparent+.page__background {
+  top: 0;
+}
+/* All page__content with a transparent cover-content toolbar and its direct descendant page_content */
+.toolbar.toolbar--transparent.toolbar--cover-content+.page__background+.page__content,
+.toolbar.toolbar--transparent.toolbar--cover-content+.page__background+.page__content .page_content {
+  top: 0;
+  padding-top: 44px;
+}
+/* All page__content with a material transparent cover-content toolbar and its direct descendant page_content */
+.toolbar.toolbar--material.toolbar--transparent.toolbar--cover-content+.page__background+.page__content,
+.toolbar.toolbar--material.toolbar--transparent.toolbar--cover-content+.page__background+.page__content .page_content {
+  top: 0;
+  padding-top: 56px;
+}
+/* -------- */
+/*  Tabbar  */
+/* -------- */
+/* All top tabbar */
+.tabbar--top {
+  padding-top: 0;
+}
+/* All bottom tabbar */
+.tabbar:not(.tabbar--top) {
+  padding-bottom: 0;
+} /* non BEM */
+/* @import './util.css'; */
+@media (orientation: landscape) {
+  html[onsflag-iphonex-landscape] .page__content {
+    padding-left: 44px;
+    padding-right: 44px;
+  }
+  /* Ignore if the page is in dialogs or modals */
+  html[onsflag-iphonex-landscape] .dialog .page__content,
+  html[onsflag-iphonex-landscape] .modal .page__content {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+/* @import './switch.css'; */
+/* @import './range.css'; */
+/* @import './notification.css'; */
+@media (orientation: landscape) {
+  html[onsflag-iphonex-landscape] .toolbar__left {
+    padding-left: 44px;
+  }
+
+  html[onsflag-iphonex-landscape] .toolbar__right {
+    padding-right: 44px;
+  }
+
+  html[onsflag-iphonex-landscape] .bottom-bar {
+    padding-right: 44px;
+    padding-left: 44px;
+  }
+}
+/* @import './button.css'; */
+/* @import './button-bar.css'; */
+/* @import './segment.css'; */
+@media (orientation: landscape) {
+  html[onsflag-iphonex-landscape] .tabbar {
+    padding-left: 44px;
+    padding-right: 44px;
+    width: calc(100% - 88px);
+  }
+}
+/* @import './toolbar-button.css'; */
+/* @import './checkbox.css'; */
+/* @import './radio-button.css'; */
+/* @import './list.css'; */
+/* @import './search-input.css'; */
+/* @import './text-input.css'; */
+/* @import './textarea.css'; */
+/* @import './dialog.css'; */
+/* @import './alert-dialog.css'; */
+/* @import './popover.css'; */
+/* @import './progress-bar.css'; */
+/* @import './progress-circular.css'; */
+@media (orientation: portrait) {
+  /* For top safe area */
+  html[onsflag-iphonex-portrait] .fab--top__left,
+  html[onsflag-iphonex-portrait] .fab--top__center,
+  html[onsflag-iphonex-portrait] .fab--top__right {
+    top: 64px;
+  }
+
+  /* For bottom safe area */
+  html[onsflag-iphonex-portrait] .fab--bottom__left,
+  html[onsflag-iphonex-portrait] .fab--bottom__center,
+  html[onsflag-iphonex-portrait] .fab--bottom__right {
+    bottom: 34px; /* Omit 20px space */
+  }
+}
+@media (orientation: landscape) {
+  /* For bottom safe area */
+  html[onsflag-iphonex-landscape] .fab--bottom__left,
+  html[onsflag-iphonex-landscape] .fab--bottom__center,
+  html[onsflag-iphonex-landscape] .fab--bottom__right {
+    bottom: 21px; /* Omit 20px space */
+  }
+  
+  /* For left safe area */
+  html[onsflag-iphonex-landscape] .fab--top__left,
+  html[onsflag-iphonex-landscape] .fab--bottom__left {
+    left: 44px; /* Omit 20px space */
+  }
+
+  /* For right safe area */
+  html[onsflag-iphonex-landscape] .fab--top__right,
+  html[onsflag-iphonex-landscape] .fab--bottom__right {
+    right: 44px; /* Omit 20px space */
+  }
+}
+/* @import './modal.css'; */
+/* @import './select.css'; */
+@media (orientation: portrait) {
+  html[onsflag-iphonex-portrait] .action-sheet {
+    bottom: 48px; /* bottom safe area + 14 pt (extra bottom margin) */
+  }
+}
+@media (orientation: landscape) {
+  html[onsflag-iphonex-landscape] .action-sheet {
+    /* The width in landscape mode is the same as the width in portrait mode */
+    left: calc((100vw - 100vh + 20px) / 2);
+    right: calc((100vw - 100vh + 20px) / 2);
+    bottom: 33px; /* bottom safe area + 12 pt (extra bottom margin) */
+  }
+}
+/* @import './card.css'; */
+@media (orientation: portrait) {
+  html[onsflag-iphonex-portrait] .toast {
+    bottom: 34px;
+  }
+}
+@media (orientation: landscape) {
+  html[onsflag-iphonex-landscape] .toast {
+    left: 52px;
+    right: 52px;
+    bottom: 21px;
+  }
+}
+/*
+  Note:
+
+  :not(X) does not work if X is a complex selector like `.foo .bar` due to the spec of :not(X).
+  Instead we have to use the following form for representing A:not(X A):not(Y A):not(Z A),
+  which means `A which does not have any X, Y and Z as its ancestors`.
+
+  // Equivalent to A:not(X A):not(Y A):not(Z A) { foo: bar; }
+  A {
+    // Apply styles for A
+    foo: bar;
+  }
+  X A,
+  Y A,
+  Z A {
+    // Subtract `X A`, `Y A` and `Z A`
+    // (Restore original styles of A)
+  }
+*/
+/*
+  Note:
+
+  @apply has been deprecated as of Oct, 2017.
+  Please do not use @apply to restore original styles.
+*/
+/* Bars and page contents */
+@media (orientation: portrait) {
+  /* Outermost toolbar */
+  html[onsflag-iphonex-portrait] .toolbar {
+    top: 0;
+    box-sizing: content-box;
+    padding-top: 44px;
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-portrait] .dialog .toolbar, /* if wrapped with dialogs */
+  html[onsflag-iphonex-portrait] .toolbar:not(.toolbar--cover-content)+.page__background+.page__content .toolbar, /* if wrapped with a page with a toolbar */
+  html[onsflag-iphonex-portrait] .tabbar--top__content .toolbar { /* if wrapped with a top tabbar */
+    /* Restore original styles */
+    top: 0;
+    box-sizing: border-box;
+    padding-top: 0;
+  }
+
+  /* Outermost bottom-bar */
+  html[onsflag-iphonex-portrait] .bottom-bar {
+    bottom: 0;
+    box-sizing: content-box;
+    padding-bottom: 34px;
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-portrait] .dialog .bottom-bar, /* if wrapped with dialogs */
+  html[onsflag-iphonex-portrait] .page-with-bottom-toolbar > .page__content .bottom-bar, /* if wrapped with a page with a bottom-bar */
+  html[onsflag-iphonex-portrait] .tabbar__content:not(.tabbar--top__content) .bottom-bar { /* if wrapped with a bottom tabbar */
+    /* Restore original styles */
+    bottom: 0;
+    box-sizing: border-box;
+    padding-bottom: 0;
+  }
+
+  /* Outermost page__content without toolbars or bottom-bars */
+  html[onsflag-iphonex-portrait] .page__content {
+    top: 0;
+    padding-top: 44px;
+    bottom: 0;
+    padding-bottom: 34px;
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-portrait] .dialog .page__content, /* if wrapped with dialogs */
+  html[onsflag-iphonex-portrait] .toolbar:not(.toolbar--cover-content)+.page__background+.page__content .page__content, /* if wrapped with a page with a toolbar */
+  html[onsflag-iphonex-portrait] .tabbar--top__content .page__content, /* if wrapped with a top tabbar */
+  html[onsflag-iphonex-portrait] .toolbar:not(.toolbar--cover-content)+.page__background+.page__content { /* if the page has a toolbar */
+    /* Restore original styles */
+    top: 0;
+    padding-top: 0;
+  }
+  html[onsflag-iphonex-portrait] .dialog .page__content, /* if wrapped with dialogs */
+  html[onsflag-iphonex-portrait] .page-with-bottom-toolbar > .page__content .page__content, /* if wrapped with a page with a bottom-bar */
+  html[onsflag-iphonex-portrait] .tabbar__content:not(.tabbar--top__content) .page__content, /* if wrapped with a bottom tabbar */
+  html[onsflag-iphonex-portrait] .page-with-bottom-toolbar > .page__content { /* if the page has a bottom-bar */
+    /* Restore original styles */
+    bottom: 0;
+    padding-bottom: 0;
+  }
+
+  /* Outermost page__content with a toolbar */
+  html[onsflag-iphonex-portrait] .toolbar:not(.toolbar--cover-content)+.page__background,
+  html[onsflag-iphonex-portrait] .toolbar:not(.toolbar--cover-content)+.page__background+.page__content {
+    top: 88px;
+    padding-top: 0;
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-portrait] .dialog .toolbar:not(.toolbar--cover-content)+.page__background,
+  html[onsflag-iphonex-portrait] .dialog .toolbar:not(.toolbar--cover-content)+.page__background+.page__content, /* if wrapped with dialogs */
+
+  html[onsflag-iphonex-portrait] .toolbar:not(.toolbar--cover-content)+.page__background+.page__content .toolbar:not(.toolbar--cover-content)+.page__background,
+  html[onsflag-iphonex-portrait] .toolbar:not(.toolbar--cover-content)+.page__background+.page__content .toolbar:not(.toolbar--cover-content)+.page__background+.page__content, /* if wrapped with a page with a toolbar */
+
+  html[onsflag-iphonex-portrait] .tabbar--top__content .toolbar:not(.toolbar--cover-content)+.page__background,
+  html[onsflag-iphonex-portrait] .tabbar--top__content .toolbar:not(.toolbar--cover-content)+.page__background+.page__content { /* if wrapped with a top tabbar */
+    /* Restore original styles */
+    top: 44px;
+    padding-top: 0;
+  }
+
+  /* Outermost page__content with a bottom-bar */
+  html[onsflag-iphonex-portrait] .page-with-bottom-toolbar > .page__content {
+    bottom: 78px;
+    padding-bottom: 0;
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-portrait] .dialog .page-with-bottom-toolbar > .page__content, /* if wrapped with dialogs */
+  html[onsflag-iphonex-portrait] .page-with-bottom-toolbar > .page__content .page-with-bottom-toolbar > .page__content, /* if wrapped with a page with a bottom-bar */
+  html[onsflag-iphonex-portrait] .tabbar__content:not(.tabbar--top__content) .page-with-bottom-toolbar > .page__content { /* if wrapped with a bottom tabbar */
+    /* Restore original styles */
+    bottom: 44px;
+    padding-bottom: 0;
+  }
+
+  /* Outermost page__content with a transparent cover-content toolbar and its direct descendant page_content */
+  html[onsflag-iphonex-portrait] .toolbar.toolbar--transparent.toolbar--cover-content+.page__background+.page__content,
+  html[onsflag-iphonex-portrait] .toolbar.toolbar--transparent.toolbar--cover-content+.page__background+.page__content .page_content {
+    top: 0;
+    padding-top: 88px;
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-portrait] .dialog .toolbar.toolbar--transparent.toolbar--cover-content+.page__background+.page__content, /* if wrapped with dialogs */
+  html[onsflag-iphonex-portrait] .dialog .toolbar.toolbar--transparent.toolbar--cover-content+.page__background+.page__content .page_content,
+  html[onsflag-iphonex-portrait] .toolbar:not(.toolbar--cover-content)+.page__background+.page__content .toolbar.toolbar--transparent.toolbar--cover-content+.page__background+.page__content, /* if wrapped with a page with a toolbar */
+  html[onsflag-iphonex-portrait] .toolbar:not(.toolbar--cover-content)+.page__background+.page__content .toolbar.toolbar--transparent.toolbar--cover-content+.page__background+.page__content .page__content,
+  html[onsflag-iphonex-portrait] .tabbar--top__content .toolbar.toolbar--transparent.toolbar--cover-content+.page__background+.page__content,
+  html[onsflag-iphonex-portrait] .tabbar--top__content .toolbar.toolbar--transparent.toolbar--cover-content+.page__background+.page__content .page_content {  /* if wrapped with a top tabbar */
+    /* Restore original styles */
+    top: 0;
+    padding-top: 44px;
+  }
+
+  /* Outermost top tabbar */
+  html[onsflag-iphonex-portrait] .tabbar--top {
+    padding-top: 44px;
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-portrait] .dialog .tabbar--top, /* if wrapped with dialogs */
+  html[onsflag-iphonex-portrait] .toolbar:not(.toolbar--cover-content)+.page__background+.page__content .tabbar--top, /* if wrapped with a page with a toolbar */
+  html[onsflag-iphonex-portrait] .tabbar--top__content .tabbar--top { /* if wrapped with a top tabbar */
+    /* Restore original styles */
+    padding-top: 0;
+  }
+
+  /* Outermost tabbar--top__content */
+  html[onsflag-iphonex-portrait] .tabbar--top__content {
+    top: calc(44px + var(--tabbar-height));
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-portrait] .dialog .tabbar--top__content, /* if wrapped with dialogs */
+  html[onsflag-iphonex-portrait] .toolbar:not(.toolbar--cover-content)+.page__background+.page__content .tabbar--top__content, /* if wrapped with a page with a toolbar */
+  html[onsflag-iphonex-portrait] .tabbar--top__content .tabbar--top__content { /* if wrapped with a top tabbar */
+    /* Restore original styles */
+    top: var(--tabbar-height);
+  }
+
+  /* Outermost bottom tabbar */
+  html[onsflag-iphonex-portrait] .tabbar:not(.tabbar--top):not(.tabbar--top) {
+    padding-bottom: 34px;
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-portrait] .dialog .tabbar:not(.tabbar--top):not(.tabbar--top), /* if wrapped with dialogs */
+  html[onsflag-iphonex-portrait] .page-with-bottom-toolbar > .page__content .tabbar:not(.tabbar--top), /* if wrapped with a page with a bottom-bar */
+  html[onsflag-iphonex-portrait] .tabbar__content:not(.tabbar--top__content) .tabbar:not(.tabbar--top) { /* if wrapped with a bottom tabbar */
+    /* Restore original styles */
+    padding-bottom: 0;
+  }
+
+  /* Outermost.tabbar__content:not(.tabbar--top__content) */
+  html[onsflag-iphonex-portrait] .tabbar__content:not(.tabbar--top__content) {
+    bottom: calc(34px + var(--tabbar-height));
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-portrait] .dialog .tabbar__content:not(.tabbar--top__content), /* if wrapped with dialogs */
+  html[onsflag-iphonex-portrait] .page-with-bottom-toolbar > .page__content .tabbar__content:not(.tabbar--top__content), /* if wrapped with a page with a bottom-bar */
+  html[onsflag-iphonex-portrait] .tabbar__content:not(.tabbar--top__content) .tabbar__content:not(.tabbar--top__content) { /* if wrapped with a bottom tabbar */
+    /* Restore original styles */
+    bottom: var(--tabbar-height);
+  }
+}
+@media (orientation: landscape) {
+  /* Outermost bottom-bar */
+  html[onsflag-iphonex-landscape] .bottom-bar {
+    bottom: 0;
+    box-sizing: content-box;
+    padding-bottom: 21px;
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-landscape] .dialog .bottom-bar, /* if wrapped with dialogs */
+  html[onsflag-iphonex-landscape] .page-with-bottom-toolbar > .page__content .bottom-bar, /* if wrapped with a page with a bottom-bar */
+  html[onsflag-iphonex-landscape] .tabbar__content:not(.tabbar--top__content) .bottom-bar { /* if wrapped with a bottom tabbar */
+    /* Restore original styles */
+    bottom: 0;
+    box-sizing: border-box;
+    padding-bottom: 0;
+  }
+
+  /* Outermost page__content without bottom-bars */
+  html[onsflag-iphonex-landscape] .page__content {
+    bottom: 0;
+    padding-bottom: 21px;
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-landscape] .dialog .page__content, /* if wrapped with dialogs */
+  html[onsflag-iphonex-landscape] .page-with-bottom-toolbar > .page__content .page__content, /* if wrapped with a page with a bottom-bar */
+  html[onsflag-iphonex-landscape] .tabbar__content:not(.tabbar--top__content) .page__content, /* if wrapped with a bottom tabbar */
+  html[onsflag-iphonex-landscape] .page-with-bottom-toolbar > .page__content { /* if the page has a bottom-bar */
+    /* Restore original styles */
+    bottom: 0;
+    padding-bottom: 0;
+  }
+
+  /* Outermost page__content with a bottom-bar */
+  html[onsflag-iphonex-landscape] .page-with-bottom-toolbar > .page__content {
+    bottom: 65px;
+    padding-bottom: 0;
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-landscape] .dialog .page-with-bottom-toolbar > .page__content, /* if wrapped with dialogs */
+  html[onsflag-iphonex-landscape] .page-with-bottom-toolbar > .page__content .page-with-bottom-toolbar > .page__content, /* if wrapped with a page with a bottom-bar */
+  html[onsflag-iphonex-landscape] .tabbar__content:not(.tabbar--top__content) .page-with-bottom-toolbar > .page__content { /* if wrapped with a bottom tabbar */
+    /* Restore original styles */
+    bottom: 44px;
+    padding-bottom: 0;
+  }
+
+  /* Outermost bottom tabbar */
+  html[onsflag-iphonex-landscape] .tabbar:not(.tabbar--top) {
+    padding-bottom: 21px;
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-landscape] .dialog .tabbar:not(.tabbar--top), /* if wrapped with dialogs */
+  html[onsflag-iphonex-landscape] .page-with-bottom-toolbar > .page__content .tabbar:not(.tabbar--top), /* if wrapped with a page with a bottom-bar */
+  html[onsflag-iphonex-landscape] .tabbar__content:not(.tabbar--top__content) .tabbar:not(.tabbar--top) { /* if wrapped with a bottom tabbar */
+    /* Restore original styles */
+    padding-bottom: 0;
+  }
+
+  /* Outermost.tabbar__content:not(.tabbar--top__content) */
+  html[onsflag-iphonex-landscape] .tabbar__content:not(.tabbar--top__content) {
+    bottom: calc(21px + var(--tabbar-height));
+  }
+  /* Non-outermost */
+  html[onsflag-iphonex-landscape] .dialog .tabbar__content:not(.tabbar--top__content), /* if wrapped with dialogs */
+  html[onsflag-iphonex-landscape] .page-with-bottom-toolbar > .page__content .tabbar__content:not(.tabbar--top__content), /* if wrapped with a page with a bottom-bar */
+  html[onsflag-iphonex-landscape] .tabbar__content:not(.tabbar--top__content) .tabbar__content:not(.tabbar--top__content) { /* if wrapped with a bottom tabbar */
+    /* Restore original styles */
+    bottom: var(--tabbar-height);
+  }
+}
+/* Lists in .page__content */
+@media (orientation: landscape) {
+  /* Only patching lists just under .page__content */
+  html[onsflag-iphonex-landscape] .page__content > .list:not(.list--inset) {
+    margin-left: -44px;
+    margin-right: -44px;
+  }
+
+  /* For left safe area */
+  html[onsflag-iphonex-landscape] .page__content > .list:not(.list--inset) > .list-header {
+    padding-left: 59px;
+  }
+  html[onsflag-iphonex-landscape] .page__content > .list:not(.list--inset) > .list-item {
+    /* margin-left is not suitable for iPhone X patch. Using padding-left here. */
+    padding-left: 58px;
+  }
+
+  /* For right safe area */
+  html[onsflag-iphonex-landscape] .page__content > .list:not(.list--inset) > .list-item--chevron:before {
+    right: 60px;
+  }
+  html[onsflag-iphonex-landscape] .page__content > .list:not(.list--inset) > .list-item > .list-item__center:last-child {
+    padding-right: 50px;
+  }
+  html[onsflag-iphonex-landscape] .page__content > .list:not(.list--inset) > .list-item > .list-item__right {
+    padding-right: 56px;
+  }
+  html[onsflag-iphonex-landscape] .page__content > .list:not(.list--inset) > .list-item > .list-item--chevron__right {
+    padding-right: 74px;
+  }
+}
+/* Lists in .page__content in dialogs and modals */
+@media (orientation: landscape) {
+  /* Only patching lists just under .page__content */
+  html[onsflag-iphonex-landscape] .dialog .page__content > .list:not(.list--inset) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  /* For left safe area */
+  html[onsflag-iphonex-landscape] .dialog .page__content > .list:not(.list--inset) > .list-header {
+    padding-left: 15px;
+  }
+  html[onsflag-iphonex-landscape] .dialog .page__content > .list:not(.list--inset) > .list-item {
+    padding-left: 14px;
+  }
+
+  /* For right safe area */
+  html[onsflag-iphonex-landscape] .dialog .page__content > .list:not(.list--inset) > .list-item--chevron:before {
+    right: 16px;
+  }
+  html[onsflag-iphonex-landscape] .dialog .page__content > .list:not(.list--inset) > .list-item > .list-item__center:last-child {
+    padding-right: 6px;
+  }
+  html[onsflag-iphonex-landscape] .dialog .page__content > .list:not(.list--inset) > .list-item > .list-item__right {
+    padding-right: 12px;
+  }
+  html[onsflag-iphonex-landscape] .dialog .page__content > .list:not(.list--inset) > .list-item > .list-item--chevron__right {
+    padding-right: 30px;
+  }
+}
+/* non BEM */

@@ -10,8 +10,9 @@ export default class Home extends Component {
     render(props, state, context) {
 
         return (
-            <Page renderToolbar={() => <Toolbar headline='Home' />}>
+            <Page>
                 <h1>Home</h1>
+                { props.currentUser ? <p>Hallo {props.currentUser.firstName} {props.currentUser.familyName}</p> : null}
             </Page>
         );
     }

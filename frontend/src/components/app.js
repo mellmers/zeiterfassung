@@ -1,83 +1,50 @@
 import { Component, h } from 'preact';
 import { Router, route } from 'preact-router';
-import { List, ListItem, Navigator, Page, Splitter, SplitterContent, SplitterSide, Tab, Tabbar } from 'react-onsenui';
 
 // Code-splitting is automated for routes
-import Home from '../routes/home';
 import Login from '../routes/Login';
 import Profile from '../routes/profile';
+import Tabs from '../routes/tabs';
 
-class Tabs extends Component {
+import LocalDB from '../utils/LocalDB';
+
+export default class App extends Component {
 
 	state = {
-		index: 0,
-		show: false
+		currentUser: null
 	};
 
 	componentWillMount() {
-		// TODO: Change on specific route
-		// setTimeout( () => {
-		// 	this.setState({index:1})
-		// }, 1000);
-
-		// Bottom border is wrong at loading, so we wait some milliseconds to show the tab bar
-		setTimeout( () => {
-			this.setState({show:true})
-		}, 250);
+		LocalDB.currentUser.get(0).then( user => {
+			console.log(user);
+			if (user && user._id && user.token) {
+				this.setState({ currentUser: user });
+			} else {
+				route('/login', true);
+			}
+		});
 	}
-
-	renderTabs() {
-		return [
-			{
-				content: <Home key='home' navigator={this.props.navigator} />,
-				tab: <Tab key='home' label='Home' icon='fa-home' />
-			},
-			{
-				content: <Profile key='me' navigator={this.props.navigator} user='me' />,
-				tab: <Tab key='me' label='Mein Profil' icon='fa-user-circle' />
-			},
-			{
-				content: <Profile key='profile' navigator={this.props.navigator} />,
-				tab: <Tab key='profile' label='Profil' icon='fa-id-card' />
-			},
-		];
-	}
-
-	render(props, state, context) {
-		return (
-			<Page>
-				{state.show ? (
-					<Tabbar
-						index={state.index}
-						onPreChange={({index}) => this.setState(index)}
-						position='bottom'
-						renderTabs={this.renderTabs.bind(this)}
-						swipeable={true}
-					/>
-				) : null}
-			</Page>
-		);
-	}
-}
-
-export default class App extends Component {
 
 	/** Gets fired when the route changes.
 	 *	@param {Object} e		'change' event from [preact-router](http://git.io/preact-router)
 	 *	@param {string} e.url	The newly routed URL
 	 */
-	handleRoute = e => {
-		switch (e.url) {
-			case '/':
-				// TODO: currentUser
-				if (this.props.currentUser === null) {
-					route('/login', true);
-				}
-				break;
-			default:
-				break;
-		}
+	handleRoute (e) {
+		console.log(e.url);
+		// switch (e.url) {
+		// 	case '/':
+		// 		break;
+		// 	default:
+		// 		break;
+		// }
 	};
+
+	onLogin(user) {
+		console.log('on login', user);
+		this.setState({ currentUser: user });
+
+		route('/');
+	}
 
 	renderPage(route, navigator) {
 		route.props = route.props || {};
@@ -91,8 +58,8 @@ export default class App extends Component {
 			<div id='app'>
 				<Router onChange={this.handleRoute}>
 					{/*<Navigator path='/' renderPage={this.renderPage} initialRoute={{comp: Tabs, props: { key: 'tabs' }}}/>*/}
-					<Tabs path='/' />
-					<Login path='/login/'/>
+					<Tabs path='/' currentUser={state.currentUser} />
+					<Login path='/login/' onLogin={this.onLogin.bind(this)} />
 					<Profile path='/profile/' user='me'/>
 					<Profile path='/profile/:user'/>
 				</Router>
