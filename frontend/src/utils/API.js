@@ -39,11 +39,6 @@ export default class API {
         });
     }
 
-    logout() {
-        // TODO: Remove login and user data from IndexedDB
-        LocalDB.currentUser.delete(0);
-    }
-
     _fetch(url, method = 'GET', body = null, query = null, header = {}, contentType = 'application/x-www-form-urlencoded') {
         return new Promise((resolve, reject) => {
             if (url.indexOf('http') === -1) {

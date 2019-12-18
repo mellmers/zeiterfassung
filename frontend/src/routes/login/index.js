@@ -1,5 +1,5 @@
 import { Component } from 'preact';
-import { Input, Page } from 'react-onsenui';
+import { Button, Input, Page } from 'react-onsenui';
 import ons from 'onsenui';
 
 import Toolbar from '../../components/toolbar';
@@ -41,7 +41,7 @@ export default class Login extends Component {
 
         return (
             <Page renderToolbar={() => <Toolbar headline='Zeiterfassung' />}>
-                <div className={style.login}>
+                <div className={'login-container ' + style.login}>
                     <form onSubmit={this.handleLogin.bind(this)}>
                         <h1>Anmeldung</h1>
                         <p>
@@ -71,7 +71,7 @@ export default class Login extends Component {
                         </p>
 
                         <p>
-                            <button className='button--material button' type='submit' disabled={state.disableLogin}>Anmelden</button>
+                            <button className={'button' + ( !ons.platform.isIOS() ? ' button--material' : '') } type='submit' disabled={state.disableLogin}>Anmelden</button>
                         </p>
                     </form>
                 </div>

@@ -1,3 +1,5 @@
+@import 'variables';
+
 html, body {
 	height: 100%;
 	width: 100%;
@@ -17,8 +19,23 @@ html, body {
 
 #app {
 	height: 100%;
+
+	.tabbar__content {
+		&.tabbar--material__content .page__content {
+			margin-top: $materialToolbarHeight;
+		}
+		.page__content {
+			margin-top: $toolbarHeight;
+		}
+	}
 }
 
 #content {
 	margin-top: 56px;
+}
+
+/* Special material changes */
+.page--material .login-container {
+	height: calc(100% - #{$materialToolbarHeight});
+	height: calc(100vh - #{$materialToolbarHeight});
 }

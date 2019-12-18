@@ -3,7 +3,6 @@ import { Router, route } from 'preact-router';
 
 // Code-splitting is automated for routes
 import Login from '../routes/Login';
-import Profile from '../routes/profile';
 import Tabs from '../routes/tabs';
 
 import LocalDB from '../utils/LocalDB';
@@ -16,7 +15,6 @@ export default class App extends Component {
 
 	componentWillMount() {
 		LocalDB.currentUser.get(0).then( user => {
-			console.log(user);
 			if (user && user._id && user.token) {
 				this.setState({ currentUser: user });
 			} else {
@@ -30,7 +28,7 @@ export default class App extends Component {
 	 *	@param {string} e.url	The newly routed URL
 	 */
 	handleRoute (e) {
-		console.log(e.url);
+		// console.log(e.url);
 		// switch (e.url) {
 		// 	case '/':
 		// 		break;
@@ -40,9 +38,7 @@ export default class App extends Component {
 	};
 
 	onLogin(user) {
-		console.log('on login', user);
 		this.setState({ currentUser: user });
-
 		route('/');
 	}
 
@@ -57,11 +53,10 @@ export default class App extends Component {
 		return (
 			<div id='app'>
 				<Router onChange={this.handleRoute}>
-					{/*<Navigator path='/' renderPage={this.renderPage} initialRoute={{comp: Tabs, props: { key: 'tabs' }}}/>*/}
 					<Tabs path='/' currentUser={state.currentUser} />
+					<Tabs path='/profil/' currentUser={state.currentUser} />
+					<Tabs path='/mitarbeiter/' currentUser={state.currentUser} />
 					<Login path='/login/' onLogin={this.onLogin.bind(this)} />
-					<Profile path='/profile/' user='me'/>
-					<Profile path='/profile/:user'/>
 				</Router>
 			</div>
 		);
