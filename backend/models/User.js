@@ -32,8 +32,8 @@ const UserSchema = new Schema({
 
 UserSchema.plugin(AutoIncrement, { id: 'staffNumberSeq', inc_field: 'staffNumber' });
 
-const saltRounds = 10;
-UserSchema.pre('save', function(next) {
+export const saltRounds = 10;
+UserSchema.pre('create', function(next) {
     this.invitationId = generateUUIDVersion4();
     // hash user pinCode before saving into database
     this.pinCode = bcrypt.hashSync(this.pinCode, saltRounds);

@@ -24,9 +24,12 @@ async function create(req, res, next) {
     };
 
     if (req.body.userId && req.user.id) {
-        await UserIsAdmin(req.user.id, res, next,(user) => {
+        if (await UserIsAdmin(req.user.id, next)) {
             workingTime.userId = req.body.userId;
-        }, 'You are not allowed to save a working time for a different user.');
+        } else {
+            res.status(403).json({status: 'error', message: 'Sie dürfen keine Arbeitszeit für einen anderen Benutzer speichern'});
+            return;
+        }
     }
 
     // Oldenburg: 8.1506953 | 53.1441014
@@ -34,16 +37,16 @@ async function create(req, res, next) {
         workingTime.location = {type: 'Point', coordinates: [longitude, latitude]};
     }
 
-    WorkingTimeModel.create(workingTime, (err, workingTime) => {
+    await WorkingTimeModel.create(workingTime, (err, workingTime) => {
         if (err) {
             res.status(400).json({
                 status: 'error',
-                message: 'Cannot create working time. Reason: ' + err.message || err.errmsg
+                message: 'Arbeitszeit kann nicht erstellt werden. Grund: ' + err.message || err.errmsg
             });
         } else if (workingTime) {
             res.status(201).json({
                 status: 'success',
-                message: 'Working time added successfully',
+                message: 'Arbeitszeit erfolgreich hinzugefügt',
                 data: {workingTime: workingTime}
             });
         }
@@ -51,16 +54,18 @@ async function create(req, res, next) {
 }
 
 async function getAll(req, res, next) {
-    await UserIsAdmin(req.user.id, res, next, (user) => {
+    if (await UserIsAdmin(req.user.id, next)) {
         WorkingTimeModel.find({}, (err, workingTimes) => {
             if (err) {
                 res.status(400).json({
                     status: 'error',
-                    message: 'Cannot get all working times. Reason: ' + err.message || err.errmsg
+                    message: 'Abfrage der Arbeitszeiten gescheitert. Grund: ' + err.message || err.errmsg
                 });
             } else if (workingTimes) {
-                res.json({status: 'success', message: 'Got all working times', data: {workingTimes: workingTimes}});
+                res.json({status: 'success', message: 'Alle Arbeitszeiten erfolgreich abgefragt', data: {workingTimes: workingTimes}});
             }
         });
-    });
+    } else {
+        res.status(403).json({status: 'error', message: 'Zugriff verweigert'});
+    }
 }

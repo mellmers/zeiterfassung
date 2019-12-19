@@ -28,6 +28,18 @@ html, body {
 			margin-top: $toolbarHeight;
 		}
 	}
+
+	ons-splitter-content .page__content {
+		padding: 0 20px;
+	}
+
+	ons-splitter-side ons-list {
+		height: 100%;
+
+		ons-list-item:not(:last-child) {
+			border-bottom: 1px solid #eee;
+		}
+	}
 }
 
 #content {

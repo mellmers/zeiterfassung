@@ -3,6 +3,7 @@ import ons from 'onsenui';
 import {Input, Page} from 'react-onsenui';
 
 import API from '../../utils/API';
+import {updateCurrentUser} from '../../utils/helpers';
 
 import style from './style.scss';
 
@@ -36,10 +37,20 @@ export default class Profile extends Component {
 
 		this.setState({ disableSubmit: true });
 
-		API.getInstance()._fetch('/user', 'UPDATE', userData)
+		API.getInstance()._fetch('/users/' + this.props.currentUser._id, 'PATCH', userData)
 			.then( response => {
-				if (this.props.onLogin) this.props.onLogin(response.data.user);
-			}, ()=>{} )
+				// Merge alten User mit neuen Daten, damit Token nicht verloren geht
+				let newCurrentUser = {...this.props.currentUser, ...response.data.user};
+				// Neue Daten in LocalDB sichern und an andere Components weitergeben
+				updateCurrentUser(newCurrentUser);
+				this.props.currentUserChanged(newCurrentUser);
+				// und noch eine kleine Benachrichtigung
+				ons.notification.toast({
+					force: true,
+					message: 'Daten erfolgreich geändert',
+					timeout: 3000
+				});
+ 			}, ()=>{} )
 			.then( () => {
 				this.setState({ disableSubmit: false });
 			});
@@ -59,7 +70,14 @@ export default class Profile extends Component {
 						</p>
 
 						<p>
-							<label htmlFor="firstName">Vorname</label>
+							<label>Status</label>
+						</p>
+						<p>
+							<label>{currentUser.role}</label>
+						</p>
+
+						<p>
+							<label htmlFor='firstName'>Vorname</label>
 						</p>
 						<p>
 							<Input
@@ -75,7 +93,7 @@ export default class Profile extends Component {
 						</p>
 
 						<p>
-							<label htmlFor="familyName">Nachname</label>
+							<label htmlFor='familyName'>Nachname</label>
 						</p>
 						<p>
 							<Input

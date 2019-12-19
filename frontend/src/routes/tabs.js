@@ -17,10 +17,13 @@ const Logout = (props, state, context) => (
 
 export default class Tabs extends Component {
 
+    defaultToolbarHeadline = 'Zeiterfassung';
+
     state = {
-        tabIndex: 0,
         show: false,
-        sideMenuIsOpen: false
+        sideMenuIsOpen: false,
+        tabIndex: 0,
+        toolbarHeadline: this.defaultToolbarHeadline
     };
 
     componentWillMount() {
@@ -30,23 +33,13 @@ export default class Tabs extends Component {
         }, 250);
 
         // Set tab based on url
-        setTimeout(() => {
-            let tabIndex = 0;
-            switch(getCurrentUrl()) {
-                case '/':
-                    tabIndex = 0;
-                    break;
-                case '/profil':
-                    tabIndex = 1;
-                    break;
-                case '/mitarbeiter':
-                    tabIndex = 2;
-                    break;
-            }
-            this.setState({
-                tabIndex: tabIndex
-            });
-        }, 1000)
+        setTimeout(this.setTabBasedOnUrl.bind(this, getCurrentUrl()), 1000)
+    }
+
+    componentWillUpdate(nextProps, nextState, nextContext) {
+        if (this.props.path !== nextProps.path) {
+            this.setTabBasedOnUrl(nextProps.path);
+        }
     }
 
     gotoUrl(url) {
@@ -83,6 +76,28 @@ export default class Tabs extends Component {
         }
     }
 
+    setTabBasedOnUrl(path) {
+        let tabIndex = 0,
+            toolbarHeadline = this.defaultToolbarHeadline;
+        switch(path) {
+            case '/':
+                tabIndex = 0;
+                break;
+            case '/profil':
+                tabIndex = 1;
+                toolbarHeadline = 'Mein Benutzerdaten';
+                break;
+            case '/mitarbeiter':
+                tabIndex = 2;
+                toolbarHeadline = 'Mitarbeiterverwaltung';
+                break;
+        }
+        this.setState({
+            tabIndex: tabIndex,
+            toolbarHeadline: toolbarHeadline
+        });
+    }
+
     showSideMenu() {
         this.setState({ sideMenuIsOpen: true });
     }
@@ -99,7 +114,7 @@ export default class Tabs extends Component {
                 tab: <Tab key='zeiterfassung' label='Zeiterfassung' icon='fa-user-clock' />
             },
             {
-                content: <Profile key='profile' currentUser={currentUser} />,
+                content: <Profile key='profile' currentUser={currentUser} currentUserChanged={this.props.currentUserChanged.bind(this)} />,
                 tab: <Tab key='profile' label='Profil' icon='fa-user-edit' />
             },
             {
@@ -114,7 +129,7 @@ export default class Tabs extends Component {
             <Splitter>
                 <SplitterContent>
                     <Page>
-                        <Toolbar headline='Zeiterfassung' showMenuToggle={true} onSideMenuButtonClick={this.showSideMenu.bind(this)} />
+                        <Toolbar headline={state.toolbarHeadline} showMenuToggle={true} onSideMenuButtonClick={this.showSideMenu.bind(this)} />
                         {state.show ? (
                             <Tabbar
                                 index={state.tabIndex}

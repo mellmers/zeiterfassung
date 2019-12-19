@@ -1,5 +1,6 @@
 import { Component } from 'preact';
-import { Button, Input, Page } from 'react-onsenui';
+import { route } from 'preact-router';
+import { Input, Page } from 'react-onsenui';
 import ons from 'onsenui';
 
 import Toolbar from '../../components/toolbar';
@@ -30,6 +31,7 @@ export default class Login extends Component {
             API.getInstance().login(staffNumber, pinCode)
                 .then( response => {
                     if (this.props.onLogin) this.props.onLogin(response.data.user);
+                    if (this.props.next) route(this.props.next); else route('/');
                 }, ()=>{} )
                 .then( () => {
                     this.setState({ disableLogin: false });

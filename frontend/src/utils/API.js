@@ -1,6 +1,7 @@
 import ons from 'onsenui';
 
-import LocalDB from '../utils/LocalDB';
+import LocalDB from './LocalDB';
+import {getCurrentUser, updateCurrentUser} from './helpers';
 
 export default class API {
 
@@ -17,7 +18,6 @@ export default class API {
     login(staffNumber, pinCode) {
         return new Promise( (resolve, reject) => {
             this._fetch('/users/authenticate', 'POST', {staffNumber: staffNumber, pinCode: pinCode}).then( result => {
-                console.log('Login:', result);
 
                 ons.notification.toast({
                     buttonLabel: result.status === 'error' ? 'Ok' : '',
@@ -27,11 +27,8 @@ export default class API {
                 });
 
                 if (result.status === 'success' && result.data.user) {
-                    // TODO: Save result in IndexedDB
-                    LocalDB.currentUser.put(result.data.user, 0).then( user => {
-                        console.log(user);
-                        resolve(result);
-                    });
+                    resolve(result);
+                    updateCurrentUser(result.data.user);
                 } else {
                     reject(result);
                 }
@@ -39,7 +36,9 @@ export default class API {
         });
     }
 
-    _fetch(url, method = 'GET', body = null, query = null, header = {}, contentType = 'application/x-www-form-urlencoded') {
+    async _fetch(url, method = 'GET', body = null, query = null, header = {}, contentType = 'application/x-www-form-urlencoded') {
+        const currentUser = await getCurrentUser();
+
         return new Promise((resolve, reject) => {
             if (url.indexOf('http') === -1) {
                 header = Object.assign({}, {
@@ -53,6 +52,11 @@ export default class API {
             for (let key in header) {
                 if (!header.hasOwnProperty(key)) continue;
                 headers.append(key, header[key]);
+            }
+
+            // Wenn Benutzer in LocalDB, dann schicke diesen als Authorization Header mit an die API
+            if (currentUser && currentUser.token) {
+                headers.append('Authorization', 'Bearer ' + currentUser.token);
             }
 
             if (query) {

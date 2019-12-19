@@ -1,6 +1,8 @@
 import { Component, h } from 'preact';
 import { Router, route } from 'preact-router';
 
+import AuthComponent from './requireAuthentication';
+
 // Code-splitting is automated for routes
 import Login from '../routes/Login';
 import Tabs from '../routes/tabs';
@@ -17,8 +19,6 @@ export default class App extends Component {
 		LocalDB.currentUser.get(0).then( user => {
 			if (user && user._id && user.token) {
 				this.setState({ currentUser: user });
-			} else {
-				route('/login', true);
 			}
 		});
 	}
@@ -37,26 +37,18 @@ export default class App extends Component {
 		// }
 	};
 
-	onLogin(user) {
+	updateCurrentUser(user) {
 		this.setState({ currentUser: user });
-		route('/');
 	}
 
-	renderPage(route, navigator) {
-		route.props = route.props || {};
-		route.props.navigator = navigator;
-
-		return h(route.comp, route.props);
-	}
-
-	render(props, state, context) {
+	render(props, {currentUser}, context) {
 		return (
 			<div id='app'>
 				<Router onChange={this.handleRoute}>
-					<Tabs path='/' currentUser={state.currentUser} />
-					<Tabs path='/profil/' currentUser={state.currentUser} />
-					<Tabs path='/mitarbeiter/' currentUser={state.currentUser} />
-					<Login path='/login/' onLogin={this.onLogin.bind(this)} />
+					<AuthComponent path='/' component={Tabs} currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
+					<AuthComponent path='/profil' component={Tabs} currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
+					<AuthComponent path='/mitarbeiter' component={Tabs} currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
+					<Login path='/login' onLogin={this.updateCurrentUser.bind(this)} />
 				</Router>
 			</div>
 		);
