@@ -1,0 +1,9 @@
+@import '../../style/variables';
+
+.pageContent {
+  padding-top: $materialToolbarHeight;
+
+  label {
+    font-weight: bold;
+  }
+}

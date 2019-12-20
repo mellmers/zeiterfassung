@@ -2,6 +2,7 @@ export default (config, env, helpers) => {
     if (env.dev) {
         config.devServer.host = 'localhost';
 
+        // https://github.com/preactjs/preact-cli/issues/75#issuecomment-305473645
         config.devServer.proxy = [
             {
                 // proxy requests matching a pattern:

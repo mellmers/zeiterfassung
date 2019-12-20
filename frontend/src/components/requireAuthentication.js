@@ -1,6 +1,7 @@
 import { Component, h } from 'preact';
 import { route } from 'preact-router';
-import LocalDB from "../utils/LocalDB";
+
+import LocalDB from '../utils/LocalDB';
 
 export default class AuthComponent extends Component {
 
@@ -9,17 +10,29 @@ export default class AuthComponent extends Component {
     };
 
     componentWillMount() {
-        LocalDB.currentUser.get(0).then( user => {
-            if (user && user._id && user.token) {
-                this.setState({ currentUser: user });
+        LocalDB.currentUser.get(0).then( currentUser => {
+            if (currentUser && currentUser._id && currentUser.token) {
+                this.setState({ currentUser: currentUser });
             } else {
                 route('/login' + (this.props.path ? '?next=' + this.props.path : null), true);
+            }
+
+            // Weiterleitung zur Startseite, wenn nicht die benötigte Rolle
+            const { requiredRole } = this.props;
+            if (requiredRole) {
+                console.log(requiredRole, currentUser.role)
+                if (requiredRole.constructor === Array) {
+                    if (requiredRole.indexOf(currentUser.role) === -1) {
+                        route('/', true);
+                    }
+                } else if (requiredRole !== currentUser.role) {
+                    route('/', true);
+                }
             }
         });
     }
 
     render(props, { currentUser}, context) {
-        console.log(props)
         if (currentUser !== null) {
             return h(props.component, props);
         }

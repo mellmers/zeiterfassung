@@ -1,9 +1,8 @@
 import { Component } from 'preact';
 import ons from 'onsenui';
-import {Input, Page} from 'react-onsenui';
+import {Input, Page, Select} from 'react-onsenui';
 
 import API from '../../utils/API';
-import {updateCurrentUser} from '../../utils/helpers';
 
 import style from './style.scss';
 
@@ -12,14 +11,32 @@ export default class Profile extends Component {
 	constructor(props) {
 		super(props);
 
-		const { currentUser } = props;
+		const { roleEditable, user } = props;
+		let userData = {
+			firstName: user.firstName,
+			familyName: user.familyName
+		};
+
+		if (roleEditable) {
+			userData.role = user.role;
+		}
+
 		this.state = {
 			disableSubmit: false,
-			userData: {
-				firstName: currentUser.firstName,
-				familyName: currentUser.familyName,
-			}
+			userData: userData
 		};
+	}
+
+	componentWillReceiveProps(nextProps, nextContext) {
+		if (this.props.user.firstName !== nextProps.user.firstName) {
+			this.setState({userData: { ...this.state.userData, firstName: nextProps.user.firstName}})
+		}
+		if (this.props.user.familyName !== nextProps.user.familyName) {
+			this.setState({userData: { ...this.state.userData, familyName: nextProps.user.familyName}})
+		}
+		if (nextProps.roleEditable && this.props.user.role !== nextProps.user.role) {
+			this.setState({userData: { ...this.state.userData, role: nextProps.user.role}})
+		}
 	}
 
 	handleInputChange(e) {
@@ -37,43 +54,55 @@ export default class Profile extends Component {
 
 		this.setState({ disableSubmit: true });
 
-		API.getInstance()._fetch('/users/' + this.props.currentUser._id, 'PATCH', userData)
+		API.getInstance()._fetch('/users/' + this.props.user._id, 'PATCH', userData)
 			.then( response => {
-				// Merge alten User mit neuen Daten, damit Token nicht verloren geht
-				let newCurrentUser = {...this.props.currentUser, ...response.data.user};
-				// Neue Daten in LocalDB sichern und an andere Components weitergeben
-				updateCurrentUser(newCurrentUser);
-				this.props.currentUserChanged(newCurrentUser);
-				// und noch eine kleine Benachrichtigung
+				let message = response.message;
+				if (response.status === 'success') {
+					// Benachrichtigungstext
+					message = 'Daten erfolgreich geändert';
+					// und User an übergeordnete Komponent weitergeben
+					this.props.userChanged(response.data.user);
+				}
+				// Eine kleine Benachrichtigung
 				ons.notification.toast({
 					force: true,
-					message: 'Daten erfolgreich geändert',
+					message: message,
 					timeout: 3000
 				});
- 			}, ()=>{} )
+			}, ()=>{} )
 			.then( () => {
 				this.setState({ disableSubmit: false });
 			});
 	}
 
-	render({ currentUser }, state, context) {
+	render({ roleEditable, user }, state, context) {
 		return (
 			<Page>
 				<div className={style.profile}>
-					<h1>Benutzerdaten ändern</h1>
 					<form onSubmit={this.handleChangeUserData.bind(this)}>
 						<p>
 							<label>Personalnummer</label>
 						</p>
 						<p>
-							<label>{currentUser.staffNumber}</label>
+							<span>{user.staffNumber}</span>
 						</p>
 
 						<p>
 							<label>Status</label>
 						</p>
 						<p>
-							<label>{currentUser.role}</label>
+							{roleEditable ? (
+								<Select
+									id='role'
+									name='role'
+									value={state.userData.role}
+									onChange={this.handleInputChange.bind(this)}
+								>
+									<option value='Mitarbeiter'>Mitarbeiter</option>
+									<option value='Administrator'>Administrator</option>
+									<option value='Terminal'>Terminal</option>
+								</Select>
+							) : <span>{user.role}</span>}
 						</p>
 
 						<p>

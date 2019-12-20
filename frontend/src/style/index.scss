@@ -29,7 +29,7 @@ html, body {
 		}
 	}
 
-	ons-splitter-content .page__content {
+	ons-splitter-content ons-page > .page__content {
 		padding: 0 20px;
 	}
 

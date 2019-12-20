@@ -8,6 +8,7 @@ import Login from '../routes/Login';
 import Tabs from '../routes/tabs';
 
 import LocalDB from '../utils/LocalDB';
+import {updateCurrentUser} from '../utils/helpers';
 
 export default class App extends Component {
 
@@ -38,7 +39,13 @@ export default class App extends Component {
 	};
 
 	updateCurrentUser(user) {
-		this.setState({ currentUser: user });
+		// Merge alten User mit neuen Daten, damit Token nicht verloren geht
+		let newCurrentUser = {...this.state.currentUser, ...user};
+		// Neue Daten in LocalDB sichern
+		updateCurrentUser(newCurrentUser);
+
+		// und an andere Components weitergeben
+		this.setState({ currentUser: newCurrentUser });
 	}
 
 	render(props, {currentUser}, context) {
@@ -47,7 +54,7 @@ export default class App extends Component {
 				<Router onChange={this.handleRoute}>
 					<AuthComponent path='/' component={Tabs} currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
 					<AuthComponent path='/profil' component={Tabs} currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
-					<AuthComponent path='/mitarbeiter' component={Tabs} currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
+					<AuthComponent path='/mitarbeiter' component={Tabs} requiredRole='Administrator' currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
 					<Login path='/login' onLogin={this.updateCurrentUser.bind(this)} />
 				</Router>
 			</div>

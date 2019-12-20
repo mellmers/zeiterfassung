@@ -2410,7 +2410,7 @@ h4, h5, h6 {
       <label class="tabbar__item tabbar--top-border__item">
         <input type="radio" name="top-tabbar-b" checked="checked">
         <button class="tabbar__button tabbar--top-border__button">
-          Zeiterfassung
+          Home
         </button>
       </label>
 
@@ -6084,8 +6084,8 @@ ons-fab.fab--material, ons-speed-dial-item.fab--material, button.fab--material {
   text-decoration: none;
   font-size: 25px;
   line-height: 56px;
-  color: #31313a;
-  background-color: #ffffff;
+  color: #ffffff;
+  background-color: #2979ff;
   box-shadow:
       0 4px 5px 0 rgba(0, 0, 0, .14),
       0 1px 10px 0 rgba(0, 0, 0, .12),
@@ -6097,8 +6097,8 @@ ons-fab.fab--material:active, ons-speed-dial-item.fab--material:active, button.f
       0 8px 10px 1px rgba(0, 0, 0, .14),
       0 3px 14px 2px rgba(0, 0, 0, .12),
       0 5px 5px -3px rgba(0, 0, 0, .4);
-  background-color: #ffffff;
-  background-color: rgba(255, 255, 255, .75);
+  background-color: #2979ff;
+  background-color: rgba(41, 121, 255, 0.7);
   transition: all 0.2s ease;
 }
 ons-fab.fab--material:focus, ons-speed-dial-item.fab--material:focus, button.fab--material:focus {

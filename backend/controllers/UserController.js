@@ -92,11 +92,16 @@ async function create(req, res, next) {
     };
 
     // Benutzer mit Benutzerrolle anlegen (dürfen aber NUR Administratoren)
-    if (req.body.role && await UserIsAdmin(req.user.id, next)) {
-        user.role = req.body.role;
-    } else {
-        res.status(403).json({status: 'error', message: 'Nur Administratoren dürfen Benutzer mit Benutzerrollen anlegen'});
-        return;
+    if (req.body.role) {
+        if (await UserIsAdmin(req.user.id, next)) {
+            user.role = req.body.role;
+        } else {
+            res.status(403).json({
+                status: 'error',
+                message: 'Nur Administratoren dürfen Benutzer mit Benutzerrollen anlegen'
+            });
+            return;
+        }
     }
 
     await UserModel.create(user, (err, user) => {
@@ -154,9 +159,10 @@ async function getUserById(req, res, next) {
 }
 
 async function updateUser(req, res, next) {
-    const isRequestedOrAdmin = await isRequestedUserOrAdmin(req, req.params.id, next);
+    const isRequested = await isRequestedUser(req, req.params.id);
+    const isAdmin = await UserIsAdmin(req.user.id, next);
 
-    if (isRequestedOrAdmin) {
+    if (isRequested || isAdmin) {
         UserModel.findById(req.params.id).then(user => {
 
             const newProperties = req.body;
@@ -168,7 +174,7 @@ async function updateUser(req, res, next) {
                             user[key] = value;
                             break;
                         case 'role':
-                            if (isRequestedOrAdmin === 'admin') {
+                            if (isAdmin) {
                                 user[key] = value;
                             } else {
                                 res.status(403).json({status: 'error', message: 'Nur Administratoren dürfen die Benutzerrolle anpassen'});

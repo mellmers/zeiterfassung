@@ -1,19 +1,16 @@
 import { Component, Fragment } from 'preact';
 import { getCurrentUrl, route } from 'preact-router';
+import ons from 'onsenui';
 import { Icon, List, ListHeader, ListItem, Page, Splitter, SplitterContent, SplitterSide, Tab, Tabbar } from 'react-onsenui';
 
 import Zeiterfassung from './zeiterfassung';
 import Login from '../routes/Login';
 import Profile from '../routes/profile';
+import Staff from '../routes/Staff';
 
 import Toolbar from '../components/toolbar';
 
 import LocalDB from '../utils/LocalDB';
-import ons from "onsenui";
-
-const Logout = (props, state, context) => (
-    <Page><p>Logout</p></Page>
-);
 
 export default class Tabs extends Component {
 
@@ -85,7 +82,7 @@ export default class Tabs extends Component {
                 break;
             case '/profil':
                 tabIndex = 1;
-                toolbarHeadline = 'Mein Benutzerdaten';
+                toolbarHeadline = 'Meine Benutzerdaten';
                 break;
             case '/mitarbeiter':
                 tabIndex = 2;
@@ -108,20 +105,24 @@ export default class Tabs extends Component {
 
     renderTabs() {
         const { currentUser} = this.props;
-        return [
+        let tabs = [
             {
                 content: <Zeiterfassung key='zeiterfassung' currentUser={currentUser} />,
                 tab: <Tab key='zeiterfassung' label='Zeiterfassung' icon='fa-user-clock' />
             },
             {
-                content: <Profile key='profile' currentUser={currentUser} currentUserChanged={this.props.currentUserChanged.bind(this)} />,
+                content: <Profile key='profile' user={currentUser} userChanged={this.props.currentUserChanged.bind(this)} />,
                 tab: <Tab key='profile' label='Profil' icon='fa-user-edit' />
-            },
-            {
-                content: <Profile key='staff' currentUser={currentUser} />,
-                tab: <Tab key='staff' label='Mitarbeiter' icon='fa-users-cog' />
-            },
+            }
         ];
+        if (currentUser.role === 'Administrator') {
+            tabs.push({
+                content: <Staff key='staff' currentUserChanged={this.props.currentUserChanged.bind(this)} />,
+                tab: <Tab key='staff' label='Mitarbeiter' icon='fa-users-cog' />
+            });
+        }
+
+        return tabs;
     }
 
     render(props, state, context) {
@@ -174,10 +175,10 @@ export default class Tabs extends Component {
                                 >
                                     { row.icon ? (
                                         <Fragment>
-                                            <div className="left">
+                                            <div className='left'>
                                                 <Icon icon={row.icon} />
                                             </div>
-                                            <div className="center">
+                                            <div className='center'>
                                                 {row.name}
                                             </div>
                                         </Fragment>

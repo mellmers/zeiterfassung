@@ -128,9 +128,9 @@
   --material-tabbar-text-color: #31313a;
   --material-tabbar-highlight-text-color: #31313a;
   --material-tabbar-highlight-color: rgba(49, 49, 58, 0.1);
-  --material-fab-text-color: #31313a;
-  --material-fab-background-color: #ffffff;
-  --material-fab-active-background-color: rgba(255, 255, 255, 0.75);
+  --material-fab-text-color: #ffffff;
+  --material-fab-background-color: var(--highlight-color);
+  --material-fab-active-background-color: color(var(--material-fab-background-color) a(70%));
   --material-card-background-color: white;
   --material-card-text-color: rgba(0, 0, 0, 0.54);
   --material-toast-background-color: rgba(0, 0, 0, 0.8);

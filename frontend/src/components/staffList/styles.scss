@@ -1,0 +1,10 @@
+.listItem {
+  width: calc(100% + 40px);
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+.listItemCenter {
+  flex-direction: column;
+  align-items: flex-start;
+}
