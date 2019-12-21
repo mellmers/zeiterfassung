@@ -2,7 +2,7 @@ import {Component} from 'preact';
 import {Fab, Icon, List, ListItem, Page} from 'react-onsenui';
 
 import AddStaff from '../addStaff';
-import StaffDetails from '../staffDetails';
+import StaffDetails from '../staffDetails/staffDetails';
 
 import API from '../../utils/API';
 
@@ -45,6 +45,7 @@ export default class Staff extends Component {
                                         key: 'staff-details-' + row.staffNumber,
                                         user: row,
                                         onUserChanged: this.updateStaffList.bind(this),
+                                        currentUser: props.currentUser,
                                         currentUserChanged: props.currentUserChanged.bind(this)
                                     })
                                 }

@@ -15,7 +15,7 @@ export default class Staff extends Component {
     render(props, state, context) {
         return (
             <Navigator
-                initialRoute={{comp: StaffList, props: { key: 'staff-list', currentUserChanged: props.currentUserChanged.bind(this) }}}
+                initialRoute={{comp: StaffList, props: { key: 'staff-list', currentUser: props.currentUser, currentUserChanged: props.currentUserChanged.bind(this) }}}
                 renderPage={this.renderPage.bind(this)}
             />
         );

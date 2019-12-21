@@ -117,7 +117,7 @@ export default class Tabs extends Component {
         ];
         if (currentUser.role === 'Administrator') {
             tabs.push({
-                content: <Staff key='staff' currentUserChanged={this.props.currentUserChanged.bind(this)} />,
+                content: <Staff key='staff' currentUser={currentUser} currentUserChanged={this.props.currentUserChanged.bind(this)} />,
                 tab: <Tab key='staff' label='Mitarbeiter' icon='fa-users-cog' />
             });
         }
