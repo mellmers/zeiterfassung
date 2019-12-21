@@ -2,8 +2,8 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-import UserModel, {saltRounds as UserPinCodeSaltRounds} from '../models/User';
-import {isRequestedUser, isRequestedUserOrAdmin, UserIsAdmin} from '../utils/helpers';
+import UserModel from '../models/User';
+import {generateUUIDVersion4, isRequestedUser, isRequestedUserOrAdmin, UserIsAdmin} from '../utils/helpers';
 
 const router = express.Router();
 
@@ -13,10 +13,13 @@ router.post('/register', register);
 router.post('/create', create);
 router.get('/', getAll);
 router.route('/:id')
+    .delete(deleteUser)
     .get(getUserById)
     .patch(updateUser);
 
 export default router;
+
+const saltRounds = 10;
 
 // Controller methods
 function authenticate(req, res, next) {
@@ -66,7 +69,8 @@ async function register(req, res, next) {
     let user = {
         familyName: req.body.familyName,
         firstName: req.body.firstName,
-        pinCode: req.body.pinCode,
+        invitationId: generateUUIDVersion4(),
+        pinCode: bcrypt.hashSync(req.body.pinCode, saltRounds),
         role: 'Mitarbeiter'
     };
 
@@ -87,7 +91,8 @@ async function create(req, res, next) {
     let user = {
         familyName: req.body.familyName,
         firstName: req.body.firstName,
-        pinCode: req.body.pinCode,
+        invitationId: generateUUIDVersion4(),
+        pinCode: bcrypt.hashSync(req.body.pinCode, saltRounds),
         role: 'Mitarbeiter'
     };
 
@@ -125,6 +130,27 @@ async function getAll(req, res, next) {
                 res.json({status: 'success', message: 'Alle Benutzerdaten erfolgreich abgefragt', data: {users: users}});
             }
         });
+    } else {
+        res.status(403).json({status: 'error', message: 'Zugriff verweigert'});
+    }
+}
+
+async function deleteUser(req, res, next) {
+    if (await isRequestedUserOrAdmin(req, req.params.id, next)) {
+        UserModel.deleteOne({ _id: req.params.id })
+            .then( response => {
+               if (response.ok) {
+                   res.json({
+                       status: 'success',
+                       message: 'Benutzer erfolgreich gelöscht',
+                   });
+               } else {
+                   res.status(400).json({status: 'error', message: 'Beim Löschen ist ein Fehler aufgetreten'});
+               }
+            })
+            .catch( err => {
+                res.status(400).json({status: 'error', message: 'Beim Löschen ist ein Fehler aufgetreten. Grund: ' + err.message || err.errmsg});
+            });
     } else {
         res.status(403).json({status: 'error', message: 'Zugriff verweigert'});
     }
@@ -170,7 +196,7 @@ async function updateUser(req, res, next) {
                 if (key in user) {
                     switch (key) {
                         case 'pinCode':
-                            value = bcrypt.hashSync(value, UserPinCodeSaltRounds);
+                            value = bcrypt.hashSync(value, saltRounds);
                             user[key] = value;
                             break;
                         case 'role':

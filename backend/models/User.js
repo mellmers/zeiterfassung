@@ -32,14 +32,6 @@ const UserSchema = new Schema({
 
 UserSchema.plugin(AutoIncrement, { id: 'staffNumberSeq', inc_field: 'staffNumber' });
 
-export const saltRounds = 10;
-UserSchema.pre('create', function(next) {
-    this.invitationId = generateUUIDVersion4();
-    // hash user pinCode before saving into database
-    this.pinCode = bcrypt.hashSync(this.pinCode, saltRounds);
-    next();
-});
-
 // UserSchema.set('autoIndex', false);
 
 export default mongoose.model('User', UserSchema);
