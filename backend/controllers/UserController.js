@@ -50,6 +50,7 @@ function authenticate(req, res, next) {
                                 firstName: user.firstName,
                                 role: user.role,
                                 invitationId: user.invitationId,
+                                timeTracking: user.timeTracking,
                                 createdAt: user.createdAt,
                                 updatedAt: user.updatedAt
                             }
@@ -71,7 +72,8 @@ async function register(req, res, next) {
         firstName: req.body.firstName,
         invitationId: generateUUIDVersion4(),
         pinCode: bcrypt.hashSync(req.body.pinCode, saltRounds),
-        role: 'Mitarbeiter'
+        role: 'Mitarbeiter',
+        timeTracking: false
     };
 
     await UserModel.create(user, (err, user) => {
@@ -93,7 +95,8 @@ async function create(req, res, next) {
         firstName: req.body.firstName,
         invitationId: generateUUIDVersion4(),
         pinCode: bcrypt.hashSync(req.body.pinCode, saltRounds),
-        role: 'Mitarbeiter'
+        role: 'Mitarbeiter',
+        timeTracking: false
     };
 
     // Benutzer mit Benutzerrolle anlegen (dürfen aber NUR Administratoren)
@@ -171,6 +174,7 @@ async function getUserById(req, res, next) {
                         firstName: user.firstName,
                         role: user.role,
                         invitationId: user.invitationId,
+                        timeTracking: user.timeTracking,
                         createdAt: user.createdAt,
                         updatedAt: user.updatedAt
                     }
@@ -209,11 +213,15 @@ async function updateUser(req, res, next) {
                             break;
                         case 'familyName':
                         case 'firstName':
+                        case 'timeTracking':
                             user[key] = value;
                             break;
                     }
                 }
             }
+
+            // set updatedAt
+            user.updatedAt = new Date();
 
             user.save().then(updatedUser => {
                 res.json({
@@ -227,6 +235,7 @@ async function updateUser(req, res, next) {
                             firstName: updatedUser.firstName,
                             role: updatedUser.role,
                             invitationId: updatedUser.invitationId,
+                            timeTracking: updatedUser.timeTracking,
                             createdAt: updatedUser.createdAt,
                             updatedAt: updatedUser.updatedAt
                         }

@@ -17,14 +17,13 @@ const pointSchema = new mongoose.Schema({
 const Schema = mongoose.Schema;
 const WorkingTimeSchema = new Schema({
     start: {
-        type: Date,
-        required: true,
+        time: Date,
+        location: pointSchema
     },
     end: {
-        type: Date,
-        required: true,
+        time: Date,
+        location: pointSchema
     },
-    location: pointSchema,
     userId: {
         type: Schema.Types.ObjectId,
         ref: 'User',
