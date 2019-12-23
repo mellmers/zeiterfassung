@@ -4,7 +4,7 @@ import {Input, Select} from 'react-onsenui';
 
 import API from '../../utils/API';
 
-import style from './style.scss';
+import styles from './styles.scss';
 
 export default class EditProfile extends Component {
 
@@ -77,7 +77,7 @@ export default class EditProfile extends Component {
 
 	render({ roleEditable, user }, state, context) {
 		return (
-			<div className={style.profile}>
+			<div className={styles.profile}>
 				<form onSubmit={this.handleChangeUserData.bind(this)}>
 					<p>
 						<label>Personalnummer</label>
