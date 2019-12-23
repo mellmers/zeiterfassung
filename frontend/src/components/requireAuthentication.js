@@ -20,7 +20,6 @@ export default class AuthComponent extends Component {
             // Weiterleitung zur Startseite, wenn nicht die benötigte Rolle
             const { requiredRole } = this.props;
             if (requiredRole) {
-                console.log(requiredRole, currentUser.role)
                 if (requiredRole.constructor === Array) {
                     if (requiredRole.indexOf(currentUser.role) === -1) {
                         route('/', true);
