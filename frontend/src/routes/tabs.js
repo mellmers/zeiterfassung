@@ -4,13 +4,13 @@ import ons from 'onsenui';
 import { Icon, List, ListHeader, ListItem, Page, Splitter, SplitterContent, SplitterSide, Tab, Tabbar } from 'react-onsenui';
 
 import Zeiterfassung from './zeiterfassung';
-import Login from '../routes/Login';
-import Profile from '../routes/profile';
-import Staff from '../routes/Staff';
+import Login from './../routes/login';
+import Profile from './../routes/profile';
+import Staff from './../routes/staff';
 
-import Toolbar from '../components/toolbar';
+import Toolbar from './../components/toolbar';
 
-import LocalDB from '../utils/LocalDB';
+import LocalDB from './../utils/LocalDB';
 
 export default class Tabs extends Component {
 

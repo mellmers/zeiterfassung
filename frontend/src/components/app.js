@@ -4,7 +4,7 @@ import { Router, route } from 'preact-router';
 import AuthComponent from './requireAuthentication';
 
 // Code-splitting is automated for routes
-import Login from './../routes/Login';
+import Login from './../routes/login';
 import Tabs from './../routes/tabs';
 
 import LocalDB from './../utils/LocalDB';
