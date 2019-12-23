@@ -1,7 +1,7 @@
 import { Link } from 'preact-router';
 import { Icon, Toolbar as OnsToolbar, ToolbarButton } from 'react-onsenui';
 
-import Logo from '../../assets/icons/logo-512x512-transparent_bg.png';
+import Logo from './../../assets/icons/logo-512x512-transparent_bg.png';
 
 import style from './style.scss';
 

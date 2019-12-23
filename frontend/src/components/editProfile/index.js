@@ -2,7 +2,7 @@ import { Component } from 'preact';
 import ons from 'onsenui';
 import {Input, Select} from 'react-onsenui';
 
-import API from '../../utils/API';
+import API from './../../utils/API';
 
 import styles from './styles.scss';
 

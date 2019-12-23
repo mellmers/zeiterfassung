@@ -2,7 +2,7 @@ import { Component } from 'preact';
 import ons from 'onsenui';
 import { Button, Icon, Page } from 'react-onsenui';
 
-import LocalDB from '../../utils/LocalDB';
+import LocalDB from './../../utils/LocalDB';
 
 import styles from './style.scss';
 

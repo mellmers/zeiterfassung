@@ -2,7 +2,7 @@ import {Component} from 'preact';
 import {BackButton, Input, Page, Select, Toolbar} from 'react-onsenui';
 import ons from 'onsenui';
 
-import API from '../../utils/API';
+import API from './../../utils/API';
 
 import styles from './styles.scss';
 

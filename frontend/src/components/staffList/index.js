@@ -1,10 +1,10 @@
 import {Component} from 'preact';
 import {Fab, Icon, List, ListItem, Page} from 'react-onsenui';
 
-import AddStaff from '../addStaff';
-import StaffDetails from '../staffDetails/staffDetails';
+import AddStaff from './../addStaff';
+import StaffDetails from './../staffDetails/staffDetails';
 
-import API from '../../utils/API';
+import API from './../../utils/API';
 
 import styles from './styles.scss'
 

@@ -1,7 +1,7 @@
 import {Component} from 'preact';
 import {Page} from 'react-onsenui';
 
-import EditProfile from '../../components/editProfile';
+import EditProfile from './../../components/editProfile';
 
 export default class Profile extends Component {
 

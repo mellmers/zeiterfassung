@@ -1,7 +1,7 @@
 import { Component, h } from 'preact';
 import { route } from 'preact-router';
 
-import LocalDB from '../utils/LocalDB';
+import LocalDB from './../utils/LocalDB';
 
 export default class AuthComponent extends Component {
 

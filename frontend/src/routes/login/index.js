@@ -3,9 +3,9 @@ import { route } from 'preact-router';
 import { Input, Page } from 'react-onsenui';
 import ons from 'onsenui';
 
-import Toolbar from '../../components/toolbar';
+import Toolbar from './../../components/toolbar';
 
-import API from '../../utils/API';
+import API from './../../utils/API';
 
 import style from './style.scss';
 

@@ -2,9 +2,9 @@ import {Component} from 'preact';
 import ons from 'onsenui';
 import {BackButton, Button, Page, Toolbar} from 'react-onsenui';
 
-import EditProfile from '../editProfile';
+import EditProfile from './../editProfile';
 
-import API from '../../utils/API';
+import API from './../../utils/API';
 
 import styles from './styles.scss';
 

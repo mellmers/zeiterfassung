@@ -1,7 +1,7 @@
 import {Component, h} from 'preact';
 import {Navigator} from 'react-onsenui';
 
-import StaffList from '../../components/staffList';
+import StaffList from './../../components/staffList';
 
 export default class Staff extends Component {
 
