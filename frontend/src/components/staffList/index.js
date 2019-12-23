@@ -25,7 +25,6 @@ export default class Staff extends Component {
     updateStaffList() {
         API.getInstance()._fetch('/users', 'GET')
             .then(response => {
-                console.log(response);
                 this.setState({staffList: response.data.users})
             });
     }
