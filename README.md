@@ -111,6 +111,18 @@ Beispiel:
 </VirtualHost>
 ```
 
+Im build-Ordner sollte eine .htaccess angelegt werden, damit auch Requests auf Unterseiten (z.B. /login) richtig aufgelöst werden können.
+```
+nano build/.htaccess
+```
+
+Inhalt: .htaccess
+```
+Options -MultiViews
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.html [QSA,L]
+```
 
 ## Frameworks, Datenbank und Tools
 

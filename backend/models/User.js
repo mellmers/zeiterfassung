@@ -1,8 +1,5 @@
 import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
 const AutoIncrement = require('mongoose-sequence')(mongoose);
-
-import { generateUUIDVersion4 } from '../utils/helpers';
 
 // Define the user schema
 const Schema = mongoose.Schema;
