@@ -29,16 +29,8 @@ html, body {
 		}
 	}
 
-	ons-splitter-content ons-page > .page__content {
+	ons-tabbar ons-page > .page__content {
 		padding: 0 20px;
-	}
-
-	ons-splitter-side ons-list {
-		height: 100%;
-
-		ons-list-item:not(:last-child) {
-			border-bottom: 1px solid #eee;
-		}
 	}
 }
 

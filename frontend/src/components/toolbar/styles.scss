@@ -1,0 +1,50 @@
+@import '../../style/variables';
+
+.logo {
+  display: block;
+  height: $materialToolbarHeight;
+  max-height: 100%;
+  width: auto;
+  padding: 5px 12px;
+}
+
+.sideMenu {
+  position: fixed;
+  z-index: 99999;
+  top: 0;
+  right: auto;
+  left: 100%;
+  width: 240px;
+  height: 100%;
+
+  transition: transform 0.3s cubic-bezier(0.1, 0.7, 0.1, 1) 0s;
+  transform: translate3d(0px, 0px, 0px);
+
+  ons-list {
+    height: 100%;
+
+    ons-list-item:not(:last-child) {
+      border-bottom: 1px solid #eee;
+    }
+  }
+}
+
+.sideMenuBackdrop {
+  display: none;
+
+  position: fixed;
+  z-index: 99998;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s linear 0s;
+}
+
+.sideMenuOpen {
+  &.sideMenu {
+    transform: translate3d(-100%, 0px, 0px);
+  }
+  &.sideMenuBackdrop {
+    display: block;
+  }
+}

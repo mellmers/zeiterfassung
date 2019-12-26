@@ -1,26 +1,114 @@
-import { Link } from 'preact-router';
-import { Icon, Toolbar as OnsToolbar, ToolbarButton } from 'react-onsenui';
+import { Component, Fragment } from 'preact';
+import {Link, route} from 'preact-router';
+import ons from 'onsenui';
+import {Icon, List, ListHeader, ListItem, Toolbar as OnsToolbar, ToolbarButton} from 'react-onsenui';
+
+import LocalDB from './../../utils/LocalDB';
 
 import Logo from './../../assets/icons/logo-512x512-transparent_bg.png';
 
-import style from './style.scss';
+import styles from './styles.scss';
 
-const Toolbar = (props, state, context) => (
-    <OnsToolbar>
-        <div className='left'>
-            <Link href='/'><img src={Logo} alt='Zeiterfassung' className={style.logo} /></Link>
-        </div>
-        <div className='center'>
-            {props.headline}
-        </div>
-        {props.showMenuToggle ? (
-            <div className='right'>
-                <ToolbarButton onClick={() => { if (props.onSideMenuButtonClick) props.onSideMenuButtonClick() }}>
-                    <Icon icon="md-menu" />
-                </ToolbarButton>
-            </div>
-        ) : null }
-    </OnsToolbar>
-);
+export default class Toolbar extends Component {
 
-export default Toolbar;
+    state = {
+        sideMenuIsOpen: false
+    };
+
+    gotoUrl(url) {
+        if (url === '/logout') {
+            this.logout();
+        } else {
+            route(url);
+        }
+    }
+
+    logout() {
+        LocalDB.currentUser.delete(0);
+        this.closeSideMenu();
+        ons.notification.toast({
+            force: true,
+            message: 'Abgemeldet',
+            timeout: 3000
+        });
+        route('/login');
+    }
+
+    closeSideMenu() {
+        this.setState({ sideMenuIsOpen: false });
+    }
+
+    showSideMenu() {
+        this.setState({ sideMenuIsOpen: true });
+    }
+
+    renderSideMenu() {
+        return (
+            <Fragment>
+                <div className={styles.sideMenu + (this.state.sideMenuIsOpen ? ' ' + styles.sideMenuOpen : '')}>
+                    <List
+                        class='list list--material'
+                        renderHeader={() => <ListHeader class='list-header list-header--material'>Zeiterfassung</ListHeader>}
+                        dataSource={[
+                            {
+                                name: 'Logout',
+                                url: '/logout',
+                                icon: 'fa-sign-out-alt'
+                            },
+                            {
+                                name: 'Login',
+                                url: '/login',
+                                icon: 'fa-sign-in-alt'
+                            }
+                        ]}
+                        renderRow={(row) =>
+                            <ListItem
+                                class='list-item list-item--material'
+                                key={row.name}
+                                modifier='longdivider'
+                                onClick={this.gotoUrl.bind(this, row.url)}
+                                tappable
+                            >
+                                { row.icon ? (
+                                    <Fragment>
+                                        <div className='left'>
+                                            <Icon icon={row.icon} />
+                                        </div>
+                                        <div className='center'>
+                                            {row.name}
+                                        </div>
+                                    </Fragment>
+                                ) : row.name}
+                            </ListItem>
+                        }
+                    />
+                </div>
+                <div className={styles.sideMenuBackdrop  + (this.state.sideMenuIsOpen ? ' ' + styles.sideMenuOpen : '')} onClick={this.closeSideMenu.bind(this)} />
+            </Fragment>
+        );
+    }
+
+    render(props, state, context) {
+        return (
+            <Fragment>
+                <OnsToolbar>
+                    <div className='left'>
+                        <Link href='/'><img src={Logo} alt='Zeiterfassung' className={styles.logo}/></Link>
+                    </div>
+                    <div className='center'>
+                        {props.headline}
+                    </div>
+                    {props.showMenuToggle ? (
+                        <div className='right'>
+                            <ToolbarButton onClick={this.showSideMenu.bind(this)}>
+                                <Icon icon="md-menu"/>
+                            </ToolbarButton>
+                        </div>
+                    ) : null}
+                </OnsToolbar>
+
+                {this.renderSideMenu()}
+            </Fragment>
+        );
+    }
+}

@@ -1,5 +1,5 @@
-import { Component, h } from 'preact';
-import { Router, route } from 'preact-router';
+import { Component } from 'preact';
+import { Router } from 'preact-router';
 
 import AuthComponent from './requireAuthentication';
 

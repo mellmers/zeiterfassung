@@ -1,16 +1,12 @@
-import { Component, Fragment } from 'preact';
+import { Component } from 'preact';
 import { getCurrentUrl, route } from 'preact-router';
-import ons from 'onsenui';
-import { Icon, List, ListHeader, ListItem, Page, Splitter, SplitterContent, SplitterSide, Tab, Tabbar } from 'react-onsenui';
+import { Page, Tab, Tabbar } from 'react-onsenui';
 
 import Zeiterfassung from './zeiterfassung';
-import Login from './../routes/login';
 import Profile from './../routes/profile';
 import Staff from './../routes/staff';
 
 import Toolbar from './../components/toolbar';
-
-import LocalDB from './../utils/LocalDB';
 
 export default class Tabs extends Component {
 
@@ -18,7 +14,6 @@ export default class Tabs extends Component {
 
     state = {
         show: false,
-        sideMenuIsOpen: false,
         tabIndex: 0,
         toolbarHeadline: this.defaultToolbarHeadline
     };
@@ -37,25 +32,6 @@ export default class Tabs extends Component {
         if (this.props.path !== nextProps.path) {
             this.setTabBasedOnUrl(nextProps.path);
         }
-    }
-
-    gotoUrl(url) {
-        if (url === '/logout') {
-            this.logout();
-        } else {
-            route(url);
-        }
-    }
-
-    logout() {
-        LocalDB.currentUser.delete(0);
-        this.closeSideMenu();
-        ons.notification.toast({
-            force: true,
-            message: 'Abgemeldet',
-            timeout: 3000
-        });
-        route('/login');
     }
 
     onTabBarPreChange(event) {
@@ -95,14 +71,6 @@ export default class Tabs extends Component {
         });
     }
 
-    showSideMenu() {
-        this.setState({ sideMenuIsOpen: true });
-    }
-
-    closeSideMenu() {
-        this.setState({ sideMenuIsOpen: false });
-    }
-
     renderTabs() {
         const { currentUser} = this.props;
         let tabs = [
@@ -127,68 +95,18 @@ export default class Tabs extends Component {
 
     render(props, state, context) {
         return (
-            <Splitter>
-                <SplitterContent>
-                    <Page>
-                        <Toolbar headline={state.toolbarHeadline} showMenuToggle={true} onSideMenuButtonClick={this.showSideMenu.bind(this)} />
-                        {state.show ? (
-                            <Tabbar
-                                index={state.tabIndex}
-                                onPreChange={this.onTabBarPreChange.bind(this)}
-                                position='bottom'
-                                renderTabs={this.renderTabs.bind(this)}
-                                swipeable={true}
-                            />
-                        ) : null}
-                    </Page>
-                </SplitterContent>
-                <SplitterSide
-                    collapse={true}
-                    isOpen={state.sideMenuIsOpen}
-                    onClose={this.closeSideMenu.bind(this)}
-                    swipeable={true}
-                    width={200}
-                >
-                    <Page>
-                        <List
-                            class='list list--material'
-                            renderHeader={() => <ListHeader class='list-header list-header--material'>Zeiterfassung</ListHeader>}
-                            dataSource={[
-                                {
-                                    name: 'Logout',
-                                    url: '/logout',
-                                    icon: 'fa-sign-out-alt'
-                                },
-                                {
-                                    name: 'Login',
-                                    url: '/login',
-                                    icon: 'fa-sign-in-alt'
-                                }
-                            ]}
-                            renderRow={(row) =>
-                                <ListItem
-                                    class='list-item list-item--material'
-                                    key={row.name}
-                                    modifier='longdivider'
-                                    onClick={this.gotoUrl.bind(this, row.url)}
-                                    tappable
-                                >
-                                    { row.icon ? (
-                                        <Fragment>
-                                            <div className='left'>
-                                                <Icon icon={row.icon} />
-                                            </div>
-                                            <div className='center'>
-                                                {row.name}
-                                            </div>
-                                        </Fragment>
-                                    ) : row.name}
-                                </ListItem>
-                            }
-                        />
-                    </Page>
-                </SplitterSide>
-            </Splitter>
+            <Page>
+                <Toolbar headline={state.toolbarHeadline} showMenuToggle={true} />
+                {state.show ? (
+                    <Tabbar
+                        index={state.tabIndex}
+                        onPreChange={this.onTabBarPreChange.bind(this)}
+                        position='bottom'
+                        renderTabs={this.renderTabs.bind(this)}
+                        swipeable={true}
+                    />
+                ) : null}
+            </Page>
         );
     }
 }
