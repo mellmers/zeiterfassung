@@ -35,6 +35,13 @@ export default class Login extends Component {
                 }, ()=>{} )
                 .then( () => {
                     this.setState({ disableLogin: false });
+                })
+                .catch(err => {
+                    ons.notification.toast({
+                        force: true,
+                        message: 'Du bist offline. Du kannst dich leider nicht einloggen.',
+                        timeout: 3000
+                    });
                 });
         }
     }

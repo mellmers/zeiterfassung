@@ -72,6 +72,14 @@ export default class EditProfile extends Component {
 			}, ()=>{} )
 			.then( () => {
 				this.setState({ disableSubmit: false });
+			})
+			.catch(err => {
+				console.log(err);
+				ons.notification.toast({
+					force: true,
+					message: 'Du bist offline. Die Daten können nicht geändert werden.',
+					timeout: 3000
+				});
 			});
 	}
 
