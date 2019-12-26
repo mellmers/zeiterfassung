@@ -6,7 +6,7 @@ import StaffDetails from './../staffDetails/staffDetails';
 
 import API from './../../utils/API';
 
-import styles from './styles.scss'
+import styles from './styles.scss';
 
 export default class Staff extends Component {
 
