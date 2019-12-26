@@ -29,7 +29,7 @@ export default class Staff extends Component {
                 this.setState({staffList: response.data.users})
             })
             .catch(err => {
-                this.setState({error: 'Mitarbeiterliste konnte nicht geladen werden. Eventuell bist du offline?!'});
+                this.setState({error: 'Du bist offline. Die Mitarbeiterliste konnte nicht geladen werden.'});
             });
     }
 

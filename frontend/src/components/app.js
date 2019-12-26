@@ -1,5 +1,6 @@
 import { Component } from 'preact';
 import { Router } from 'preact-router';
+import ons from 'onsenui';
 
 import AuthComponent from './requireAuthentication';
 
@@ -13,7 +14,8 @@ import {updateCurrentUser} from './../utils/helpers';
 export default class App extends Component {
 
 	state = {
-		currentUser: null
+		currentUser: null,
+		toast: null
 	};
 
 	componentWillMount() {
@@ -22,6 +24,25 @@ export default class App extends Component {
 				this.setState({ currentUser: user });
 			}
 		});
+	}
+
+	componentDidMount() {
+		// Quelle: https://whatwebcando.today/online-state.html
+		window.addEventListener('online', this.handleNetworkStatusChange.bind(this));
+		window.addEventListener('offline', this.handleNetworkStatusChange.bind(this));
+	}
+
+	handleNetworkStatusChange() {
+		// Wenn offline, dann dauerhaft eine Benachrichtigung anzeigen
+		if (!navigator.onLine) {
+			this.setState({
+				toast: {
+					message: 'Du bist seit ' + new Date().toTimeString().split(' ')[0] + ' Uhr offline.'
+				}
+			});
+		} else {
+			this.setState({ toast: null });
+		}
 	}
 
 	/** Gets fired when the route changes.
@@ -48,6 +69,20 @@ export default class App extends Component {
 		this.setState({ currentUser: newCurrentUser });
 	}
 
+	renderToast() {
+		const { toast } = this.state;
+
+		if (toast === null) return;
+
+		return (
+			<div className={'toast' + ( !ons.platform.isIOS() ? ' toast--material' : '') }>
+				<div className={'toast__message' + ( !ons.platform.isIOS() ? ' toast--material__message' : '') }>
+					{toast && toast.message ? toast.message : ''}
+				</div>
+			</div>
+		);
+	}
+
 	render(props, {currentUser}, context) {
 		return (
 			<div id='app'>
@@ -57,6 +92,7 @@ export default class App extends Component {
 					<AuthComponent path='/mitarbeiter' component={Tabs} requiredRole='Administrator' currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
 					<Login path='/login' onLogin={this.updateCurrentUser.bind(this)} />
 				</Router>
+				{this.renderToast()}
 			</div>
 		);
 	}
