@@ -11,6 +11,7 @@ import styles from './styles.scss';
 export default class Staff extends Component {
 
     state = {
+        error: null,
         staffList: null
     };
 
@@ -26,10 +27,22 @@ export default class Staff extends Component {
         API.getInstance()._fetch('/users', 'GET')
             .then(response => {
                 this.setState({staffList: response.data.users})
+            })
+            .catch(err => {
+                this.setState({error: 'Mitarbeiterliste konnte nicht geladen werden. Eventuell bist du offline?!'});
             });
     }
 
-    render(props, {staffList}, context) {
+    render(props, {error, staffList}, context) {
+
+        if (error) {
+            return (
+                <Page>
+                    <p>{error}</p>
+                </Page>
+            );
+        }
+
         return (
             <Page>
                 {staffList && staffList.length > 0 ? (
