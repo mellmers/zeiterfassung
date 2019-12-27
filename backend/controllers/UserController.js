@@ -16,6 +16,7 @@ router.route('/:id')
     .delete(deleteUser)
     .get(getUserById)
     .patch(updateUser);
+router.get('/invitation/:id', getUserByInvitation);
 
 export default router;
 
@@ -250,4 +251,29 @@ async function updateUser(req, res, next) {
     } else {
         res.status(403).json({status: 'error', message: 'Zugriff verweigert'});
     }
+}
+
+async function getUserByInvitation(req, res, next) {
+    UserModel.find({invitationId: req.params.id}).then(u => {
+        const user = u[0];
+        res.json({
+            status: 'success',
+            message: 'Benutzer (' + user._id + ') erfolgreich geladen',
+            data: {
+                user: {
+                    _id: user._id,
+                    staffNumber: user.staffNumber,
+                    familyName: user.familyName,
+                    firstName: user.firstName,
+                    role: user.role,
+                    invitationId: user.invitationId,
+                    timeTracking: user.timeTracking,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt
+                }
+            }
+        });
+    }).catch(err => {
+        res.status(404).json({status: 'error', message: 'Benutzer nicht gefunden'});
+    });
 }

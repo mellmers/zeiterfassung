@@ -8,6 +8,7 @@ export default function jwt() {
             '/api/version',
             '/api/users/authenticate',
             '/api/users/register',
+            '/api/users/invitation',
         ]
     });
 }
