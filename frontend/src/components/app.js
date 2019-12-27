@@ -92,7 +92,10 @@ export default class App extends Component {
 					<AuthComponent path='/mitarbeiter' component={Tabs} requiredRole='Administrator' currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
 					<Login path='/login' onLogin={this.updateCurrentUser.bind(this)} />
 				</Router>
+
 				{this.renderToast()}
+
+				<div id='printWrapper'/>
 			</div>
 		);
 	}

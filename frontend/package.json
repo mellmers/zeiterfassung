@@ -47,6 +47,7 @@
     "preact": "^10.0.1",
     "preact-render-to-string": "^5.1.0",
     "preact-router": "^3.0.0",
+    "qrcode.react": "^1.0.0",
     "react-onsenui": "^1.11.2"
   }
 }
