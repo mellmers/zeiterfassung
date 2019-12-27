@@ -25,6 +25,57 @@ export default class Zeiterfassung extends Component {
         });
     }
 
+    componentDidMount() {
+        // Shake-Detection (Modified), Quelle: https://github.com/alexgibson/shake.js/
+        //
+        // Determine if the DeviceMotionEvent is supported using feature detection.
+        if (window.DeviceMotionEvent) {
+            const threshold = 5, // shake strength threshold
+                timeout = 1000; // determines the frequency of event generation
+
+            let lastTime = new Date(),
+                lastX = null,
+                lastY = null,
+                lastZ = null;
+
+            // The device motion event returns data about the rotation and acceleration information
+            // of the device. The event returns two properties: acceleration and accelerationIncldingGravity
+            window.addEventListener('devicemotion', e => {
+                let current = e.accelerationIncludingGravity,
+                    currentTime,
+                    timeDifference;
+
+                if ((lastX === null) && (lastY === null) && (lastZ === null)) {
+                    lastX = current.x;
+                    lastY = current.y;
+                    lastZ = current.z;
+                    return;
+                }
+
+                let deltaX = Math.abs(lastX - current.x),
+                    deltaY = Math.abs(lastY - current.y),
+                    deltaZ = Math.abs(lastZ - current.z);
+
+                if (((deltaX > threshold) && (deltaY > threshold)) || ((deltaX > threshold) && (deltaZ > threshold)) || ((deltaY > threshold) && (deltaZ > threshold))) {
+                    //calculate time in milliseconds since last shake registered
+                    currentTime = new Date();
+                    timeDifference = currentTime.getTime() - lastTime.getTime();
+
+                    if (timeDifference > timeout) {
+                        this.handleTimeTrackingClick();
+                        lastTime = new Date();
+                    }
+                }
+
+                lastX = current.x;
+                lastY = current.y;
+                lastZ = current.z;
+            }, false);
+        } else {
+            console.log('DeviceMotion is not supported.');
+        }
+    }
+
     // 'Count Up from Date and Time with Javascript', Quelle: https://guwii.com/bytes/count-date-time-javascript/
     countUpFrom(from) {
         let countFrom = new Date(from),
@@ -52,18 +103,44 @@ export default class Zeiterfassung extends Component {
         this.setState({ timer: timer });
     };
 
+    /** Get current location, Quelle: https://whatwebcando.today/geolocation.html
+      * return position object or null
+      */
+    getCurrentLocation() {
+        return new Promise((resolve, reject) => {
+            // Determine if the location is supported using feature detection.
+            if ('geolocation' in navigator) {
+                navigator.geolocation.getCurrentPosition(function (location) {
+                    if (location && location.coords) {
+                        resolve({
+                            type: 'Point',
+                            coordinates: [location.coords.longitude, location.coords.latitude]
+                        });
+                    } else {
+                        resolve(null);
+                    }
+                }, () => {
+                    resolve(null);
+                });
+            } else {
+                console.log('Geolocation API not supported.');
+                resolve(null);
+            }
+        });
+    }
+
     async handleTimeTrackingClick() {
         const { currentUser } = this.props,
             { timeTracking } = this.state,
             now = new Date();
-        let location = null; // TODO: Add location, wenn verfügbar
+        let location = await this.getCurrentLocation();
 
         // TODO: Check online/offline, wenn online dann direkter Request an die API und Response in LocalDB
 
         if (timeTracking) {
             await LocalDB.table('localWorkingTimes').where('userId').equals(currentUser._id).reverse().toArray().then(async workingTimes => {
                 for (let key in workingTimes) {
-                    if (!workingTimes[key].hasOwnProperty('end')) {
+                if (!workingTimes[key].hasOwnProperty('end')) {
                         await LocalDB.table('localWorkingTimes').update(workingTimes[key].id, {
                             end: {
                                 time: now,
@@ -112,6 +189,9 @@ export default class Zeiterfassung extends Component {
                 timeout: 3000
             });
         }
+
+        // Vibration mit Pattern, Quelle: https://whatwebcando.today/vibration.html
+        if (navigator.vibrate) navigator.vibrate([100, 200, 200, 200]);
 
         // Update state
         LocalDB.table('localWorkingTimes').where('userId').equals(currentUser._id).reverse().sortBy('start.time').then( workingTimes => {
