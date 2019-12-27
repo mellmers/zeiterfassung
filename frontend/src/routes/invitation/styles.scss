@@ -1,0 +1,21 @@
+@import '../../style/variables';
+
+.invitation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: calc(100% - #{$toolbarHeight});
+  height: calc(100vh - #{$toolbarHeight});
+  padding: 0 25px;
+}
+
+.data {
+  max-width: 100%;
+  text-align: center;
+
+  ons-button {
+    display: table;
+    margin: 0 auto 25px;
+  }
+}

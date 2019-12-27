@@ -5,6 +5,7 @@ import ons from 'onsenui';
 import AuthComponent from './requireAuthentication';
 
 // Code-splitting is automated for routes
+import Invitation from '../routes/invitation';
 import Login from './../routes/login';
 import Tabs from './../routes/tabs';
 
@@ -91,6 +92,7 @@ export default class App extends Component {
 					<AuthComponent path='/profil' component={Tabs} currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
 					<AuthComponent path='/mitarbeiter' component={Tabs} requiredRole='Administrator' currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
 					<Login path='/login' onLogin={this.updateCurrentUser.bind(this)} />
+					<Invitation path='/user/invitation/:id' />
 				</Router>
 
 				{this.renderToast()}

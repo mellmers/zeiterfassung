@@ -7,7 +7,7 @@ import Toolbar from './../../components/toolbar';
 
 import API from './../../utils/API';
 
-import style from './style.scss';
+import styles from './styles.scss';
 
 export default class Login extends Component {
 
@@ -50,7 +50,7 @@ export default class Login extends Component {
 
         return (
             <Page renderToolbar={() => <Toolbar headline='Zeiterfassung' />}>
-                <div className={'login-container ' + style.login}>
+                <div className={'page-with-toolbar ' + styles.login}>
                     <form onSubmit={this.handleLogin.bind(this)}>
                         <h1>Anmeldung</h1>
                         <p>

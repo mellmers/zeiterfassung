@@ -54,7 +54,7 @@ html, body {
 }
 
 /* Special material changes */
-.page--material .login-container {
+.page--material .page-with-toolbar {
 	height: calc(100% - #{$materialToolbarHeight});
 	height: calc(100vh - #{$materialToolbarHeight});
 }
