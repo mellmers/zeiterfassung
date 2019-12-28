@@ -1,12 +1,13 @@
 import {Component} from 'preact';
-import {route} from 'preact-router';
 import ons from 'onsenui';
 import {Button, Input, Page} from 'react-onsenui';
-import QRReader from 'react-qr-reader'
+import QRReader from 'react-qr-reader';
+import bcrypt from 'bcryptjs';
 
 import Toolbar from './../../components/toolbar';
 
 import API from './../../utils/API';
+import LocalDB from './../../utils/LocalDB';
 
 import styles from './styles.scss';
 
@@ -17,8 +18,31 @@ export default class Terminal extends Component {
         pinCode: null,
         scanData: null,
         showQRScanner: false,
-        staffNumber: null,
+        staffNumber: null
     };
+
+    componentWillMount() {
+        // Benutzerdaten bei Seitenaufruf aus der DB holen
+        this.fetchUsersData();
+        // Jede Stunde Daten holen, wenn Internetverbindung
+        this.fetchInterval = setInterval(this.fetchUsersData.bind(this), 60 * 60 * 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.fetchInterval);
+    }
+
+    // Wenn die Anwendung eine Internetverbindung hat, dann hole Benutzerdaten und speichere diese in LocalDB
+    fetchUsersData() {
+        if (navigator.onLine) {
+            API.getInstance()._fetch('/users')
+                .then(response => {
+                    if (response.status === 'success') {
+                        LocalDB.users.bulkPut(response.data.users);
+                    }
+                });
+        }
+    }
 
     handleInputChange(e) {
         this.setState({ [e.target.name]: e.target.value });
@@ -32,40 +56,49 @@ export default class Terminal extends Component {
 
 
         // TODO: Anmeldung lokal, Arbeitszeit erfassen und wenn online synchronisieren
-
-        /*
         if (staffNumber && pinCode) {
-            API.getInstance().login(staffNumber, pinCode)
-                .then( response => {
-                    if (this.props.onLogin) this.props.onLogin(response.data.user);
-                    if (this.props.next) route(this.props.next); else route('/');
-                }, ()=>{} )
-                .then( () => {
-                    this.setState({ disableActions: false });
-                })
-                .catch(err => {
+            LocalDB.users.where({ staffNumber: parseInt(staffNumber) }).first( user => {
+                if (user && bcrypt.compareSync(pinCode, user.pinCode)) {
+                    // TODO: Arbeitszeiterfassung starten/stoppen, vibrieren und Benachrichtung anzeigen
+                    const now = new Date();
+                    // Start
                     ons.notification.toast({
+                        buttonLabel: 'Ok',
                         force: true,
-                        message: 'Du bist offline. Du kannst dich leider nicht einloggen.',
+                        message: 'Herzlichen Willkommen, ' + user.firstName + ' ' + user.familyName + '! <br/> Die Zeiterfassung wurde gestartet am ' + now.toLocaleDateString() + ' um ' + now.toLocaleTimeString() + ' Uhr',
+                        timeout: 10000
+                    });
+                } else {
+                    ons.notification.toast({
+                        buttonLabel: 'Ok',
+                        force: true,
+                        message: 'Angaben falsch',
                         timeout: 3000
                     });
-                });
+                }
+                this.setState({ disableActions: false });
+            }).catch(error => {
+                console.error(error.stack || error);
+                this.setState({ disableActions: false });
+            });
         }
-        */
     }
 
     handleScan(data) {
-        console.log('DATA:', data);
+        console.log('QR-Data:', data);
         if (data) {
             this.setState({
                 scanData: data,
                 showQRScanner: false
             });
         }
+
+        // TODO: Ähnlich 'handleLogin'
     }
 
     handleError(err) {
         alert(err);
+        this.setState({ showQRScanner: false });
     }
 
     openQRCodeScanner() {
@@ -77,10 +110,10 @@ export default class Terminal extends Component {
         if (state.showQRScanner) {
             return (
                 <QRReader
-                    delay={500}
+                    delay={300}
                     onError={this.handleError.bind(this)}
                     onScan={this.handleScan.bind(this)}
-                    style={{ width: '100%' }}
+                    style={{ width: '100%', maxHeight: '100%' }}
                 />
             );
         }
