@@ -1,0 +1,23 @@
+@import '../../style/variables';
+
+.terminal {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	height: calc(100% - #{$toolbarHeight});
+	height: calc(100vh - #{$toolbarHeight});
+
+	h1 {
+		margin-bottom: 40px;
+	}
+
+	.spacer {
+		margin: 40px 0;
+	}
+
+	ons-input, button, ons-button {
+		width: 200px;
+		max-width: 100%;
+	}
+}

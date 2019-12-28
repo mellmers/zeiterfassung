@@ -24,14 +24,8 @@ export default class Toolbar extends Component {
     }
 
     logout() {
-        LocalDB.currentUser.delete(0);
         this.closeSideMenu();
-        ons.notification.toast({
-            force: true,
-            message: 'Abgemeldet',
-            timeout: 3000
-        });
-        route('/login');
+        route('/logout');
     }
 
     closeSideMenu() {

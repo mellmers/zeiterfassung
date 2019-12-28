@@ -20,7 +20,7 @@ export default class API {
             this._fetch('/users/authenticate', 'POST', {staffNumber: staffNumber, pinCode: pinCode}).then( result => {
 
                 ons.notification.toast({
-                    buttonLabel: result.status === 'error' ? 'Ok' : '',
+                    buttonLabel: 'Ok',
                     force: true,
                     message: result.message,
                     timeout: result.status === 'error'? 10000 : 3000
