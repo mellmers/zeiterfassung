@@ -58,11 +58,10 @@ export default class Terminal extends Component {
         console.log('DATA:', data);
         if (data) {
             this.setState({
-                scanData: data
+                scanData: data,
+                showQRScanner: false
             });
         }
-
-        this.setState({ showQRScanner: false });
     }
 
     handleError(err) {
