@@ -30,13 +30,15 @@ workbox.routing.setCatchHandler(({ event }) => {
 
 // Custom part
 
-// Arbeitszeiten API-Anfragen mit Workbox Background Sync speichern und senden, wenn das Gerät wieder online ist
-// Quelle: https://jgw96.github.io/blog/2018/07/29/Easy-Background-Sync-with-Workbox/
+// Arbeitszeiten API-Anfragen mit Workbox Background Sync speichern und senden, wenn das Gerät wieder online ist, dann Benachrichtigung anzeigen
+// 1. Quelle: https://jgw96.github.io/blog/2018/07/29/Easy-Background-Sync-with-Workbox/ (veralteter Callback)
+// 2. Quelle: https://developers.google.com/web/tools/workbox/reference-docs/latest/workbox.backgroundSync.Queue
 const bgSyncQueueName = 'zeiterfassungBgSyncQueue';
+// Benachrichtungsberechtigung muss zuerst vom Benutzer eingeholt werden. Dies geschieht, wenn der Benutzer
+// das erste mal eine Arbeitszeit anlegen möchte
 const showNotification = () => {
-    // Benachrichtungsberechtigung muss zuerst vom Benutzer eingeholt werden. Dies geschieht, wenn der Benutzer
-    // das erste mal eine Arbeitszeit anlegen möchte
     console.log('Show notification');
+
     self.registration.showNotification('Arbeitszeiten übertragen', {
         body: 'Das Gerät ist wieder online. Deine Arbeitszeiten wurden erfolgreich übertragen!',
         icon: 'assets/icons/android-chrome-512x512.png',
@@ -46,7 +48,16 @@ const showNotification = () => {
 const bgSyncPlugin = new workbox.backgroundSync.Plugin(bgSyncQueueName, {
     maxRetentionTime: 24 * 60, // Retry for max of 24 Hours
     callbacks: {
-        queueDidReplay: showNotification
+        onSync: async queue => {
+            console.log('Queue', queue);
+            try {
+                await queue.replayRequests();
+                showNotification();
+            } catch (error) {
+                showNotification();
+                console.log(error);
+            }
+        }
     }
 });
 // POST-Anfragen an den /working-time API-Endpunkt abfangen und speichern, wenn die Anwendung offline ist
