@@ -1,9 +1,6 @@
 import { Component, Fragment } from 'preact';
 import {Link, route} from 'preact-router';
-import ons from 'onsenui';
 import {Icon, List, ListHeader, ListItem, Toolbar as OnsToolbar, ToolbarButton} from 'react-onsenui';
-
-import LocalDB from './../../utils/LocalDB';
 
 import Logo from './../../assets/icons/logo-512x512-transparent_bg.png';
 
@@ -16,10 +13,16 @@ export default class Toolbar extends Component {
     };
 
     gotoUrl(url) {
-        if (url === '/logout') {
-            this.logout();
-        } else {
-            route(url);
+        switch (url) {
+            case '/logout':
+                this.logout();
+                break;
+            case '/reload':
+                location.reload();
+                break;
+            default:
+                route(url);
+                break;
         }
     }
 
@@ -44,6 +47,11 @@ export default class Toolbar extends Component {
                         class='list list--material'
                         renderHeader={() => <ListHeader class='list-header list-header--material'>Zeiterfassung</ListHeader>}
                         dataSource={[
+                            {
+                                name: 'Seite neuladen',
+                                url: '/reload',
+                                icon: 'fa-redo'
+                            },
                             {
                                 name: 'Logout',
                                 url: '/logout',
@@ -94,14 +102,24 @@ export default class Toolbar extends Component {
                     </div>
                     {props.showMenuToggle ? (
                         <div className='right'>
+                            <ToolbarButton onClick={()=>{location.reload()}}>
+                                <Icon icon="fa-redo" size={18}/>
+                            </ToolbarButton>
+                            <ToolbarButton onClick={this.logout.bind(this)}>
+                                <Icon icon="fa-sign-out-alt" size={20}/>
+                            </ToolbarButton>
+                        </div>
+                    )
+                    /*(
+                        <div className='right'>
                             <ToolbarButton onClick={this.showSideMenu.bind(this)}>
                                 <Icon icon="md-menu"/>
                             </ToolbarButton>
                         </div>
-                    ) : null}
+                    )*/ : null}
                 </OnsToolbar>
 
-                {this.renderSideMenu()}
+                {/*{this.renderSideMenu()}*/}
             </Fragment>
         );
     }
