@@ -48,12 +48,10 @@ const showNotification = () => {
 const bgSyncPlugin = new workbox.backgroundSync.Plugin(bgSyncQueueName, {
     maxRetentionTime: 24 * 60, // Retry for max of 24 Hours
     onSync: async queue => {
-        console.log('Queue', queue);
+        showNotification();
         try {
             await queue.replayRequests();
-            showNotification();
         } catch (error) {
-            showNotification();
             console.log(error);
         }
     }
