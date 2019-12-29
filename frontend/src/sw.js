@@ -45,6 +45,7 @@ self.addEventListener('fetch', (event) => {
 
 // Wird aufgerufen, wenn das Sync Event ausgelöst wird
 self.addEventListener('sync', function(event) {
+    console.log('SYNC:', event.tag);
     if (event.tag === bgSyncQueueName) {
         event.waitUntil(doSomeStuff());
     }
