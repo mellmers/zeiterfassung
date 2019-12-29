@@ -1,7 +1,6 @@
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
 
-const isNav = event => event.request.mode === 'navigate',
-    bgSyncQueueName = 'zeiterfassungBgSyncQueue';
+const isNav = event => event.request.mode === 'navigate';
 
 /**
  * Adding this before `precacheAndRoute` lets us handle all
@@ -31,11 +30,23 @@ workbox.routing.setCatchHandler(({ event }) => {
 
 // Custom part
 
+const bgSyncQueueName = 'zeiterfassungBgSyncQueue';
+const showNotification = () => {
+    console.log('Notification');
+    self.registration.showNotification('Post Sent', {
+        body: 'You are back online and your post was successfully sent!',
+        icon: 'assets/icon/256.png',
+        badge: 'assets/icon/32png.png'
+    });
+};
 const bgSyncPlugin = new workbox.backgroundSync.Plugin(bgSyncQueueName, {
-    maxRetentionTime: 24 * 60 // Retry for max of 24 Hours
+    maxRetentionTime: 24 * 60, // Retry for max of 24 Hours
+    callbacks: {
+        queueDidReplay: showNotification
+    }
 });
 workbox.routing.registerRoute(
-    new RegExp('^https:\/\/zeiterfassung.moritzellmers.de/api/working-time\/'),
+    'https://zeiterfassung.moritzellmers.de/api/working-time',
     workbox.strategies.networkOnly({
         plugins: [bgSyncPlugin]
     }),
