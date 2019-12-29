@@ -145,10 +145,7 @@ export default class Zeiterfassung extends Component {
         let location = await this.getCurrentLocation(),
             postBody = {};
 
-        // TODO: Check online/offline, wenn online dann direkter Request an die API und Response in LocalDB
-        if (!navigator.onLine) {
-            // Zeit lokal, sonst wird Zeit vom Server gesetzt
-        }
+        this.requestNotificationPermission();
 
         if (timeTracking) {
             // Update vorhandene Arbeitszeit
@@ -214,8 +211,19 @@ export default class Zeiterfassung extends Component {
         // Request an die API, um die Daten persistent zu speichern
         // Falls der Request nicht funktioniert, weil keine Internetverbindung besteht, soll der Service Worker diesen Request
         // zur Background Sync Queue hinzufügen, um den Request später zu verarbeiten
-        API.getInstance()._fetch('/working-time', 'POST', postBody).then( workingTime => {
-            console.log('Response workingTime:', workingTime);
+        API.getInstance()._fetch('/working-time', 'POST', postBody);
+    }
+
+    requestNotificationPermission() {
+        if (!('Notification' in window)) {
+            alert('Notification API not supported!');
+            return;
+        }
+
+        Notification.requestPermission(function (result) {
+            if (result === 'denied') {
+                confirm('Du erhältst keine Benachrichtung, wenn deine offline erfassten Arbeitszeiten erfolgreich mit dem Server synchronisiert wurden.');
+            }
         });
     }
 

@@ -34,7 +34,8 @@ workbox.routing.setCatchHandler(({ event }) => {
 // Quelle: https://jgw96.github.io/blog/2018/07/29/Easy-Background-Sync-with-Workbox/
 const bgSyncQueueName = 'zeiterfassungBgSyncQueue';
 const showNotification = () => {
-    console.log('Notification');
+    // Benachrichtungsberechtigung muss zuerst vom Benutzer eingeholt werden. Dies geschieht, wenn der Benutzer
+    // das erste mal eine Arbeitszeit anlegen möchte
     self.registration.showNotification('Arbeitszeiten übertragen', {
         body: 'Das Gerät ist wieder online. Deine Arbeitszeiten wurden erfolgreich übertragen!',
         icon: 'assets/icons/android-chrome-512x512.png',
@@ -55,34 +56,3 @@ workbox.routing.registerRoute(
     }),
     'POST'
 );
-
-// const queue = new workbox.backgroundSync.Queue(bgSyncQueueName);
-//
-// self.addEventListener('fetch', (event) => {
-//     // Clone the request to ensure it's safe to read when
-//     // adding to the Queue.
-//     const promiseChain = fetch(event.request.clone())
-//         .catch((err) => {
-//             console.log('SW sync:', event, event.request);
-//             return queue.pushRequest({request: event.request});
-//         });
-//
-//     event.waitUntil(promiseChain);
-// });
-//
-// // Wird aufgerufen, wenn das Sync Event ausgelöst wird
-// self.addEventListener('sync', function(event) {
-//     console.log('SYNC:', event.tag);
-//     if (event.tag === bgSyncQueueName) {
-//         event.waitUntil(doSomeStuff());
-//     }
-// });
-//
-// function doSomeStuff() {
-//     return new Promise((resolve, reject) => {
-//         console.log('Do some stuff in service worker ...');
-//
-//         // Wenn Funktion erfolgreich, dann wird Request ausgeführt, sonst wird ein neues Sync-Event erstellt
-//         resolve(true);
-//     });
-// }

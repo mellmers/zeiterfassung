@@ -1,5 +1,5 @@
 import { Component } from 'preact';
-import {getCurrentUrl, route, Router} from 'preact-router';
+import { getCurrentUrl, route, Router } from 'preact-router';
 import ons from 'onsenui';
 
 import AuthComponent from './requireAuthentication';
@@ -36,6 +36,13 @@ export default class App extends Component {
 		// Quelle: https://whatwebcando.today/online-state.html
 		window.addEventListener('online', this.handleNetworkStatusChange.bind(this));
 		window.addEventListener('offline', this.handleNetworkStatusChange.bind(this));
+		// Bei Aufruf der Anwendung testen, wie der Netzwerstatus ist
+		this.handleNetworkStatusChange();
+
+		// PWA Installationsaufforderung abfangen und für später speichern
+		window.addEventListener('beforeinstallprompt', function (e) {
+			window.deferredInstallPrompt = e;
+		});
 	}
 
 	handleNetworkStatusChange() {
@@ -57,13 +64,6 @@ export default class App extends Component {
 	 */
 	handleRoute (e) {
 		this.checkIsTerminal();
-		// console.log(e.url);
-		// switch (e.url) {
-		// 	case '/':
-		// 		break;
-		// 	default:
-		// 		break;
-		// }
 	};
 
 	// Wenn Benutzerrolle 'Terminal, dann leite auf /terminal weiter
@@ -96,7 +96,7 @@ export default class App extends Component {
 		if (toast === null) return;
 
 		return (
-			<div className={'toast' + ( !ons.platform.isIOS() ? ' toast--material' : '') }>
+			<div className={'toast' + ( !ons.platform.isIOS() ? ' toast--material' : '') } style={{ pointerEvents: 'none' }}>
 				<div className={'toast__message' + ( !ons.platform.isIOS() ? ' toast--material__message' : '') }>
 					{toast && toast.message ? toast.message : ''}
 				</div>
