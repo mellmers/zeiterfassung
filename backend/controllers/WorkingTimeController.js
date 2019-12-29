@@ -21,7 +21,7 @@ async function toggleTracking(req, res, next) {
     let userId = req.user.id,
         responseWT = null;
 
-    if (req.body.userId && req.user.id) {
+    if (req.body.userId && userId) {
         if (await UserIsAdmin(req.user.id, next)) {
             userId = req.body.userId;
         } else {
@@ -30,26 +30,17 @@ async function toggleTracking(req, res, next) {
         }
     }
 
-    let user = null;
-    await UserModel.findById(userId).then(u => {
-        user = u;
-    }).catch(err => {
-        res.status(404).json({status: 'error', message: 'Benutzer nicht gefunden'});
-    });
-
-    // Abbrechen, wenn Benutzer nicht gefunden wird
-    if (user === null) return;
-
     const now = new Date();
 
     try {
-        await WorkingTimeModel.find({ userId: user._id, end: { $eq: null } }, (err, foundWT) => {
+        await WorkingTimeModel.find({ userId: userId, end: { $eq: null } }, (err, foundWT) => {
             if (err) {
                 res.status(400).json({
                     status: 'error',
                     message: 'Arbeitszeit kann nicht erstellt werden. Grund: ' + err.message || err.errmsg
                 });
             } else if (foundWT && foundWT.length === 1) {
+                console.log('Update entry');
                 // Update entry
 
                 let wT = foundWT[0];
@@ -76,6 +67,7 @@ async function toggleTracking(req, res, next) {
                     res.status(400).json({status: 'error', message: 'Update der Arbeitszeit hat nicht funktioniert. Grund: ' + err});
                 });
             } else {
+                console.log('New entry');
                 // New entry
                 let wT = {
                     start: {
