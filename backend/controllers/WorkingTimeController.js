@@ -3,7 +3,6 @@ import express from 'express';
 import WorkingTimeModel from '../models/WorkingTime';
 
 import { UserIsAdmin } from '../utils/helpers';
-import UserModel from "../models/User";
 
 const router = express.Router();
 
@@ -40,7 +39,6 @@ async function toggleTracking(req, res, next) {
                     message: 'Arbeitszeit kann nicht erstellt werden. Grund: ' + err.message || err.errmsg
                 });
             } else if (foundWT && foundWT.length === 1) {
-                console.log('Update entry');
                 // Update entry
 
                 let wT = foundWT[0];
@@ -67,7 +65,6 @@ async function toggleTracking(req, res, next) {
                     res.status(400).json({status: 'error', message: 'Update der Arbeitszeit hat nicht funktioniert. Grund: ' + err});
                 });
             } else {
-                console.log('New entry');
                 // New entry
                 let wT = {
                     start: {
