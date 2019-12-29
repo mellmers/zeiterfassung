@@ -215,7 +215,6 @@ export default class Zeiterfassung extends Component {
             // und der state 'timeTracking' muss auf true gesetzt werden
             for (let key in workingTimes) {
                 if (!workingTimes[key].hasOwnProperty('end')) {
-                    console.log(workingTimes[key], workingTimes[key].id);
                     const startTime = new Date(workingTimes[key].start.time);
                     // Setup timer interval
                     this.interval = setInterval(this.countUpFrom.bind(this, startTime), 1000);
