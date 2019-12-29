@@ -2,6 +2,7 @@ import { Component } from 'preact';
 import ons from 'onsenui';
 import { Button, Icon, Page } from 'react-onsenui';
 
+import API from './../../utils/API';
 import LocalDB from './../../utils/LocalDB';
 
 import styles from './style.scss';
@@ -13,16 +14,24 @@ export default class Zeiterfassung extends Component {
 
         this.state = {
             timer: null,
-            timeTracking: props.currentUser ? props.currentUser.timeTracking : false,
+            timeTracking: false,
             workingTimes: []
         };
     }
 
     componentWillMount() {
-        // TODO: irgendwann LocalDB und Serverdaten synchronisieren
-        LocalDB.table('localWorkingTimes').where('userId').equals(this.props.currentUser._id).reverse().sortBy('start.time').then( workingTimes => {
-            this.setState({ workingTimes: workingTimes });
-        });
+        if (navigator.onLine) {
+            API.getInstance()._fetch('/working-time')
+                .then(response => {
+                    if (response.status === 'success') {
+                        LocalDB.localWorkingTimes.clear();
+                        LocalDB.localWorkingTimes.bulkPut(response.data.workingTimes).then(this.updateStateWithDataFromLocalDB.bind(this));
+                    }
+                });
+        } else {
+            // Falls keine Verbindung besteht, dann nehme Daten aus der LocalDB und setze Arbeitszeiten in den state
+            this.updateStateWithDataFromLocalDB();
+        }
     }
 
     componentDidMount() {
@@ -136,12 +145,16 @@ export default class Zeiterfassung extends Component {
         let location = await this.getCurrentLocation();
 
         // TODO: Check online/offline, wenn online dann direkter Request an die API und Response in LocalDB
+        if (!navigator.onLine) {
+            // Zeit lokal, sonst wird Zeit vom Server gesetzt
+        }
 
         if (timeTracking) {
-            await LocalDB.table('localWorkingTimes').where('userId').equals(currentUser._id).reverse().toArray().then(async workingTimes => {
+            // Update vorhandene Arbeitszeit
+            await LocalDB.localWorkingTimes.where({ userId: currentUser._id }).reverse().toArray().then(async workingTimes => {
                 for (let key in workingTimes) {
-                if (!workingTimes[key].hasOwnProperty('end')) {
-                        await LocalDB.table('localWorkingTimes').update(workingTimes[key].id, {
+                    if (!workingTimes[key].hasOwnProperty('end')) {
+                        await LocalDB.localWorkingTimes.update(workingTimes[key].id, {
                             end: {
                                 time: now,
                                 location: location
@@ -154,19 +167,15 @@ export default class Zeiterfassung extends Component {
                 }
             });
 
-            // Stop timer
-            clearInterval(this.interval);
-            this.setState({ timer: null });
-
             // Benachrichtung anzeigen
             ons.notification.toast({
                 buttonLabel: 'Ok',
-                force: true,
                 message: 'Zeiterfassung beendet am ' + now.toLocaleDateString() + ' um ' + now.toLocaleTimeString(),
                 timeout: 3000
             });
         } else {
-            await LocalDB.table('localWorkingTimes').add({
+            // Neue Arbeitszeit anlegen
+            await LocalDB.localWorkingTimes.add({
                 userId: currentUser._id,
                 start: {
                     time: now,
@@ -176,15 +185,9 @@ export default class Zeiterfassung extends Component {
                 updatedAt: now
             });
 
-            // Setup timer interval
-            this.interval = setInterval(this.countUpFrom.bind(this, now), 1000);
-            // And call it once
-            this.countUpFrom(now);
-
             // Benachrichtung anzeigen
             ons.notification.toast({
                 buttonLabel: 'Ok',
-                force: true,
                 message: 'Zeiterfassung gestartet am ' + now.toLocaleDateString() + ' um ' + now.toLocaleTimeString(),
                 timeout: 3000
             });
@@ -194,8 +197,47 @@ export default class Zeiterfassung extends Component {
         if (navigator.vibrate) navigator.vibrate([100, 200, 200, 200]);
 
         // Update state
-        LocalDB.table('localWorkingTimes').where('userId').equals(currentUser._id).reverse().sortBy('start.time').then( workingTimes => {
-            this.setState({ timeTracking: !timeTracking, workingTimes: workingTimes });
+        this.updateStateWithDataFromLocalDB();
+
+        // Request an entfernte Datenbank
+        API.getInstance()._fetch('/working-time', 'POST').then( workingTime => {
+            console.log('Response workingTime:', workingTime);
+        });
+    }
+
+    // Hole Arbeitszeiten aus der LocalDB, sortiere die Daten nach Startzeit und update den state
+    updateStateWithDataFromLocalDB() {
+        LocalDB.localWorkingTimes.where({ userId: this.props.currentUser._id }).reverse().sortBy('start.time').then( workingTimes => {
+            let timeTracking = false;
+
+            // Arbeitszeiten nach Eintrag ohne 'end'-Date durchsuchen
+            // Wenn es eine Zeit gibt, dann muss der Timer aktiviert werden
+            // und der state 'timeTracking' muss auf true gesetzt werden
+            for (let key in workingTimes) {
+                if (!workingTimes[key].hasOwnProperty('end')) {
+                    console.log(workingTimes[key], workingTimes[key].id);
+                    const startTime = new Date(workingTimes[key].start.time);
+                    // Setup timer interval
+                    this.interval = setInterval(this.countUpFrom.bind(this, startTime), 1000);
+                    // Und einmal aufrufen, damit der Timer sofort anfängt zu zählen
+                    this.countUpFrom(startTime);
+
+                    timeTracking = true;
+                    break;
+                }
+            }
+
+            // Wenn die Zeit nicht läuft, dann deaktiviere den Timer aus
+            if (!timeTracking) {
+                clearInterval(this.interval);
+                this.setState({ timer: null });
+            }
+
+            // Update state
+            this.setState({
+                workingTimes: workingTimes,
+                timeTracking: timeTracking
+            });
         });
     }
 
@@ -218,7 +260,7 @@ export default class Zeiterfassung extends Component {
         if (workingTimes.length <= 0) return;
 
         return (
-            <table className={styles.workingTimesTable} cellspacing="10">
+            <table className={styles.workingTimesTable} cellspacing='10'>
                 <thead>
                     <tr>
                         <th>Tag</th>
@@ -229,12 +271,17 @@ export default class Zeiterfassung extends Component {
                 </thead>
                 <tbody>
                     {workingTimes.map( (wT, index) => {
+                        let start = new Date(wT.start.time),
+                            end = null;
+                        if (wT.end && wT.end.time) {
+                            end = new Date(wT.end.time);
+                        }
                         return (
                             <tr key={index}>
-                                <td>{days[wT.start.time.getDay()]}{wT.end && wT.end.time && wT.start.time.getDay() !== wT.end.time.getDay() ? ' - ' + days[wT.end.time.getDay()] : null}</td>
-                                <td>{wT.start && wT.start.time ? wT.start.time.toLocaleDateString() : '-'}{wT.end && wT.end.time && wT.start.time.toLocaleDateString() !== wT.end.time.toLocaleDateString() ? ' - ' + wT.end.time.toLocaleDateString() : null}</td>
-                                <td>{wT.start && wT.start.time ? wT.start.time.toLocaleTimeString() : '-'}</td>
-                                <td>{wT.end && wT.end.time ? wT.end.time.toLocaleTimeString() : '-'}</td>
+                                <td>{days[start.getDay()]}{end && start.getDay() !== end.getDay() ? ' - ' + days[end.getDay()] : null}</td>
+                                <td>{start.toLocaleDateString()}{end && start.toLocaleDateString() !== end.toLocaleDateString() ? ' - ' + end.toLocaleDateString() : null}</td>
+                                <td>{start.toLocaleTimeString()}</td>
+                                <td>{end ? end.toLocaleTimeString() : '-'}</td>
                             </tr>
                         )
                     })}

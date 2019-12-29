@@ -1,6 +1,7 @@
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
 
-const isNav = event => event.request.mode === 'navigate';
+const isNav = event => event.request.mode === 'navigate',
+    bgSyncQueueName = 'zeiterfassungBgSyncQueue';
 
 /**
  * Adding this before `precacheAndRoute` lets us handle all
@@ -16,6 +17,9 @@ workbox.routing.registerRoute(
             new workbox.cacheableResponse.Plugin({
                 statuses: [200], // only cache valid responses, not opaque responses e.g. wifi portal.
             }),
+            new workbox.backgroundSync.Plugin(bgSyncQueueName, {
+                maxRetentionTime: 24 * 60 // Retry for max of 24 Hours (specified in minutes)
+            }),
         ],
     })
 );
@@ -26,4 +30,18 @@ workbox.routing.setCatchHandler(({ event }) => {
     if (isNav(event))
         return caches.match(workbox.precaching.getCacheKeyForURL('/index.html'));
     return Response.error();
+});
+
+const queue = new workbox.backgroundSync.Queue(bgSyncQueueName);
+
+self.addEventListener('fetch', (event) => {
+    // Clone the request to ensure it's safe to read when
+    // adding to the Queue.
+    const promiseChain = fetch(event.request.clone())
+        .catch((err) => {
+            console.log('SW sync:', event, event.request);
+            return queue.pushRequest({request: event.request});
+        });
+
+    event.waitUntil(promiseChain);
 });

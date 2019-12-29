@@ -39,7 +39,7 @@ export default class Login extends Component {
                 .catch(err => {
                     ons.notification.toast({
                         force: true,
-                        message: 'Du bist offline. Du kannst dich leider nicht einloggen.',
+                        message: 'Das Gerät ist offline. Du kannst dich daher leider nicht einloggen.',
                         timeout: 3000
                     });
                 });

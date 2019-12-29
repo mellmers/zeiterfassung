@@ -43,7 +43,7 @@ export default class App extends Component {
 		if (!navigator.onLine) {
 			this.setState({
 				toast: {
-					message: 'Du bist seit ' + new Date().toTimeString().split(' ')[0] + ' Uhr offline.'
+					message: 'Das Gerät ist seit ' + new Date().toTimeString().split(' ')[0] + ' Uhr offline.'
 				}
 			});
 		} else {
