@@ -17,6 +17,9 @@ workbox.routing.registerRoute(
             new workbox.cacheableResponse.Plugin({
                 statuses: [200], // only cache valid responses, not opaque responses e.g. wifi portal.
             }),
+            new workbox.backgroundSync.Plugin(bgSyncQueueName, {
+                maxRetentionTime: 24 * 60 // Retry for max of 24 Hours (specified in minutes)
+            })
         ],
     })
 );
@@ -44,18 +47,18 @@ workbox.routing.setCatchHandler(({ event }) => {
 // });
 //
 // // Wird aufgerufen, wenn das Sync Event ausgelöst wird
-// self.addEventListener('sync', function(event) {
-//     console.log('SYNC:', event.tag);
-//     if (event.tag === bgSyncQueueName) {
-//         event.waitUntil(doSomeStuff());
-//     }
-// });
-//
-// function doSomeStuff() {
-//     return new Promise((resolve, reject) => {
-//         console.log('Do some stuff in service worker ...');
-//
-//         // Wenn Funktion erfolgreich, dann wird Request ausgeführt, sonst wird ein neues Sync-Event erstellt
-//         resolve(true);
-//     });
-// }
+self.addEventListener('sync', function(event) {
+    console.log('SYNC:', event.tag);
+    if (event.tag === bgSyncQueueName) {
+        event.waitUntil(doSomeStuff());
+    }
+});
+
+function doSomeStuff() {
+    return new Promise((resolve, reject) => {
+        console.log('Do some stuff in service worker ...');
+
+        // Wenn Funktion erfolgreich, dann wird Request ausgeführt, sonst wird ein neues Sync-Event erstellt
+        resolve(true);
+    });
+}
