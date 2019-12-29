@@ -43,22 +43,6 @@ async function toggleTracking(req, res, next) {
     const now = new Date();
 
     try {
-        const updateUserAndSendResponse = function () {
-            user.timeTracking = !user.timeTracking;
-            user.updatedAt = now;
-
-            user.save().then(updatedUser => {
-                res.status(201).json({
-                    status: 'success',
-                    message: 'Arbeitszeiterfassung ' + (user.timeTracking ? 'gestoppt' : 'gestartet'),
-                    data: { workingTime: responseWT }
-                });
-
-            }).catch(err => {
-                res.status(400).json({status: 'error', message: 'Benutzer konnte nicht bearbeitet werden. Grund: ' + err});
-            });
-        };
-
         await WorkingTimeModel.find({ userId: user._id, end: { $eq: null } }, (err, foundWT) => {
             if (err) {
                 res.status(400).json({
@@ -67,12 +51,11 @@ async function toggleTracking(req, res, next) {
                 });
             } else if (foundWT && foundWT.length === 1) {
                 // Update entry
-                console.log(foundWT);
 
                 let wT = foundWT[0];
 
                 wT.end = {
-                    time: now,
+                    time: end || now,
                     location: null
                 };
                 wT.updatedAt = now;
@@ -84,7 +67,11 @@ async function toggleTracking(req, res, next) {
 
                 wT.save().then(updatedWorkingTime => {
                     responseWT = updatedWorkingTime;
-                    updateUserAndSendResponse();
+                    res.status(201).json({
+                        status: 'success',
+                        message: 'Arbeitszeiterfassung gestoppt',
+                        data: { workingTime: responseWT }
+                    });
                 }).catch(err => {
                     res.status(400).json({status: 'error', message: 'Update der Arbeitszeit hat nicht funktioniert. Grund: ' + err});
                 });
@@ -92,7 +79,7 @@ async function toggleTracking(req, res, next) {
                 // New entry
                 let wT = {
                     start: {
-                        time: now,
+                        time: start || now,
                         location: null
                     },
                     userId: userId
@@ -111,7 +98,11 @@ async function toggleTracking(req, res, next) {
                         });
                     } else if (workingTime) {
                         responseWT = workingTime;
-                        updateUserAndSendResponse();
+                        res.status(201).json({
+                            status: 'success',
+                            message: 'Arbeitszeiterfassung gestartet',
+                            data: { workingTime: responseWT }
+                        });
                     }
                 });
             }

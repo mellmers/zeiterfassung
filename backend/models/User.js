@@ -25,7 +25,6 @@ const UserSchema = new Schema({
         type: String,
         enum: ['Terminal', 'Administrator', 'Mitarbeiter']
     },
-    timeTracking: Boolean
 }, { timestamps: {} });
 
 UserSchema.plugin(AutoIncrement, { id: 'staffNumberSeq', inc_field: 'staffNumber' });
