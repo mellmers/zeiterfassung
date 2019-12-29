@@ -32,16 +32,16 @@ workbox.routing.setCatchHandler(({ event }) => {
     return Response.error();
 });
 
-const queue = new workbox.backgroundSync.Queue(bgSyncQueueName);
-
-self.addEventListener('fetch', (event) => {
-    // Clone the request to ensure it's safe to read when
-    // adding to the Queue.
-    const promiseChain = fetch(event.request.clone())
-        .catch((err) => {
-            console.log('SW sync:', event, event.request);
-            return queue.pushRequest({request: event.request});
-        });
-
-    event.waitUntil(promiseChain);
-});
+// const queue = new workbox.backgroundSync.Queue(bgSyncQueueName);
+//
+// self.addEventListener('fetch', (event) => {
+//     // Clone the request to ensure it's safe to read when
+//     // adding to the Queue.
+//     const promiseChain = fetch(event.request.clone())
+//         .catch((err) => {
+//             console.log('SW sync:', event, event.request);
+//             return queue.pushRequest({request: event.request});
+//         });
+//
+//     event.waitUntil(promiseChain);
+// });
