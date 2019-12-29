@@ -142,7 +142,8 @@ export default class Zeiterfassung extends Component {
         const { currentUser } = this.props,
             { timeTracking } = this.state,
             now = new Date();
-        let location = await this.getCurrentLocation();
+        let location = await this.getCurrentLocation(),
+            postBody = {};
 
         // TODO: Check online/offline, wenn online dann direkter Request an die API und Response in LocalDB
         if (!navigator.onLine) {
@@ -161,6 +162,9 @@ export default class Zeiterfassung extends Component {
                             },
                             updatedAt: now
                         });
+
+                        // Speichere Endzeit, um diese an die Datenbank zu schicken
+                        postBody.end = now;
 
                         break;
                     }
@@ -185,6 +189,9 @@ export default class Zeiterfassung extends Component {
                 updatedAt: now
             });
 
+            // Speichere Startzeit, um diese an die Datenbank zu schicken
+            postBody.start = now;
+
             // Benachrichtung anzeigen
             ons.notification.toast({
                 buttonLabel: 'Ok',
@@ -199,8 +206,15 @@ export default class Zeiterfassung extends Component {
         // Update state
         this.updateStateWithDataFromLocalDB();
 
-        // Request an entfernte Datenbank
-        API.getInstance()._fetch('/working-time', 'POST').then( workingTime => {
+        // Speichere Location, um diese an die Datenbank zu schicken
+        if (location) {
+            postBody.longitude = location.coordinates[0];
+            postBody.latitude = location.coordinates[1];
+        }
+        // Request an die API, um die Daten persistent zu speichern
+        // Falls der Request nicht funktioniert, weil keine Internetverbindung besteht, soll der Service Worker diesen Request
+        // zur Background Sync Queue hinzufügen, um den Request später zu verarbeiten
+        API.getInstance()._fetch('/working-time', 'POST', postBody).then( workingTime => {
             console.log('Response workingTime:', workingTime);
         });
     }
