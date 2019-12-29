@@ -30,13 +30,15 @@ workbox.routing.setCatchHandler(({ event }) => {
 
 // Custom part
 
+// Arbeitszeiten API-Anfragen mit Workbox Background Sync speichern und senden, wenn das Gerät wieder online ist
+// Quelle: https://jgw96.github.io/blog/2018/07/29/Easy-Background-Sync-with-Workbox/
 const bgSyncQueueName = 'zeiterfassungBgSyncQueue';
 const showNotification = () => {
     console.log('Notification');
-    self.registration.showNotification('Post Sent', {
-        body: 'You are back online and your post was successfully sent!',
-        icon: 'assets/icon/256.png',
-        badge: 'assets/icon/32png.png'
+    self.registration.showNotification('Arbeitszeiten übertragen', {
+        body: 'Das Gerät ist wieder online. Deine Arbeitszeiten wurden erfolgreich übertragen!',
+        icon: 'assets/icons/android-chrome-512x512.png',
+        badge: 'assets/icons/favicon-32x32.png'
     });
 };
 const bgSyncPlugin = new workbox.backgroundSync.Plugin(bgSyncQueueName, {
@@ -45,6 +47,7 @@ const bgSyncPlugin = new workbox.backgroundSync.Plugin(bgSyncQueueName, {
         queueDidReplay: showNotification
     }
 });
+// POST-Anfragen an den /working-time API-Endpunkt abfangen und speichern, wenn die Anwendung offline ist
 workbox.routing.registerRoute(
     'https://zeiterfassung.moritzellmers.de/api/working-time',
     workbox.strategies.networkOnly({
