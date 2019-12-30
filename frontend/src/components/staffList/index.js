@@ -19,6 +19,12 @@ export default class Staff extends Component {
         this.updateStaffList();
     }
 
+    componentWillReceiveProps(nextProps, nextContext) {
+        if (JSON.stringify(this.props.currentUser) !== JSON.stringify(nextProps.navigator.props.initialRoute.props.currentUser)) {
+            this.updateStaffList();
+        }
+    }
+
     gotoComponent(component, props) {
         this.props.navigator.pushPage({comp: component, props});
     }
