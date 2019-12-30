@@ -47,14 +47,6 @@ const showNotification = () => {
 };
 const bgSyncPlugin = new workbox.backgroundSync.Plugin(bgSyncQueueName, {
     maxRetentionTime: 24 * 60, // Retry for max of 24 Hours
-    onSync: async ({queue}) => {
-        showNotification();
-        try {
-            await queue.replayRequests();
-        } catch (error) {
-            console.log(error);
-        }
-    }
 });
 // POST-Anfragen an den /working-time API-Endpunkt abfangen und speichern, wenn die Anwendung offline ist
 workbox.routing.registerRoute(
