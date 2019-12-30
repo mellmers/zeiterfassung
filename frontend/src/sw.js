@@ -37,8 +37,6 @@ const bgSyncQueueName = 'zeiterfassungBgSyncQueue';
 // Benachrichtungsberechtigung muss zuerst vom Benutzer eingeholt werden. Dies geschieht, wenn der Benutzer
 // das erste mal eine Arbeitszeit anlegen möchte
 const showNotification = () => {
-    console.log('Show notification');
-
     self.registration.showNotification('Arbeitszeiten übertragen', {
         body: 'Das Gerät ist wieder online. Deine Arbeitszeiten wurden erfolgreich übertragen!',
         icon: 'assets/icons/android-chrome-512x512.png',
