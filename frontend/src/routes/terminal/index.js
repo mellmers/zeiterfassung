@@ -17,7 +17,6 @@ export default class Terminal extends Component {
     state = {
         disableActions: false,
         pinCode: '',
-        scanData: null,
         showQRScanner: false,
         staffNumber: ''
     };
@@ -66,8 +65,6 @@ export default class Terminal extends Component {
 
         this.setState({ disableActions: true });
 
-
-        // TODO: Anmeldung lokal, Arbeitszeit erfassen und wenn online synchronisieren
         if (staffNumber && pinCode) {
             LocalDB.users.where({ staffNumber: parseInt(staffNumber) }).first( user => {
                 if (user && bcrypt.compareSync(pinCode, user.pinCode)) {
@@ -89,15 +86,24 @@ export default class Terminal extends Component {
     }
 
     handleScan(data) {
-        console.log('QR-Data:', data);
         if (data) {
-            this.setState({
-                scanData: data,
-                showQRScanner: false
+            this.setState({ showQRScanner: false });
+
+            LocalDB.users.where({ staffNumber: parseInt(data) }).first( user => {
+                if (user) {
+                    this.toggleTimeTracking(user);
+                } else {
+                    ons.notification.toast({
+                        buttonLabel: 'Ok',
+                        force: true,
+                        message: 'Keinen Benutzer gefunden. QR-Code falsch?',
+                        timeout: 3000
+                    });
+                }
+            }).catch(error => {
+                console.error(error.stack || error);
             });
         }
-
-        // TODO: Ähnlich 'handleLogin'
     }
 
     handleError(err) {
@@ -263,8 +269,6 @@ export default class Terminal extends Component {
                         <p className={styles.spacer}>oder</p>
 
                         <Button onClick={this.openQRCodeScanner.bind(this)} disabled={state.disableActions}>QR-Code scannen</Button>
-
-                        <div>{state.scanData}</div>
                     </form>
                 </div>
             </Page>
