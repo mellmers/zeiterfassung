@@ -19,6 +19,22 @@ export async function UserIsAdmin(id, next) {
     });
 }
 
+export async function UserIsTerminal(id, next) {
+    return new Promise( resolve => {
+        UserModel.findById(id).exec( (err, user) => {
+            if (err) {
+                next(err);
+                return;
+            }
+            if (user && ( user.role === 'Terminal')) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    });
+}
+
 export async function isRequestedUser(req, userId) {
     return new Promise( resolve => {
         if (req.user.id === userId) {

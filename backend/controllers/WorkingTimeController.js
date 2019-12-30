@@ -2,7 +2,7 @@ import express from 'express';
 
 import WorkingTimeModel from '../models/WorkingTime';
 
-import { UserIsAdmin } from '../utils/helpers';
+import {UserIsAdmin, UserIsTerminal} from '../utils/helpers';
 
 const router = express.Router();
 
@@ -105,7 +105,7 @@ async function toggleTracking(req, res, next) {
 }
 
 async function getAll(req, res, next) {
-    if (await UserIsAdmin(req.user.id, next)) {
+    if (await UserIsTerminal(req.user.id, next)) {
         WorkingTimeModel.find({}, (err, workingTimes) => {
             if (err) {
                 res.status(400).json({
@@ -117,6 +117,15 @@ async function getAll(req, res, next) {
             }
         });
     } else {
-        res.status(403).json({status: 'error', message: 'Zugriff verweigert'});
+        WorkingTimeModel.find({ userId: req.user.id }, (err, workingTimes) => {
+            if (err) {
+                res.status(400).json({
+                    status: 'error',
+                    message: 'Abfrage der Arbeitszeiten gescheitert. Grund: ' + err.message || err.errmsg
+                });
+            } else if (workingTimes) {
+                res.json({status: 'success', message: 'Deine Arbeitszeiten wurden erfolgreich abgefragt', data: {workingTimes: workingTimes}});
+            }
+        });
     }
 }
