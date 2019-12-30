@@ -3,6 +3,7 @@ import ons from 'onsenui';
 import { Button, Icon, Page } from 'react-onsenui';
 
 import API from './../../utils/API';
+import {getCurrentLocation, requestNotificationPermission} from './../../utils/helpers';
 import LocalDB from './../../utils/LocalDB';
 
 import styles from './style.scss';
@@ -70,6 +71,7 @@ export default class Zeiterfassung extends Component {
                     currentTime = new Date();
                     timeDifference = currentTime.getTime() - lastTime.getTime();
 
+                    // Starte/Stoppe Zeiterfassung
                     if (timeDifference > timeout) {
                         this.handleTimeTrackingClick();
                         lastTime = new Date();
@@ -112,40 +114,14 @@ export default class Zeiterfassung extends Component {
         this.setState({ timer: timer });
     };
 
-    /** Get current location, Quelle: https://whatwebcando.today/geolocation.html
-      * return position object or null
-      */
-    getCurrentLocation() {
-        return new Promise((resolve, reject) => {
-            // Determine if the location is supported using feature detection.
-            if ('geolocation' in navigator) {
-                navigator.geolocation.getCurrentPosition(function (location) {
-                    if (location && location.coords) {
-                        resolve({
-                            type: 'Point',
-                            coordinates: [location.coords.longitude, location.coords.latitude]
-                        });
-                    } else {
-                        resolve(null);
-                    }
-                }, () => {
-                    resolve(null);
-                });
-            } else {
-                console.log('Geolocation API not supported.');
-                resolve(null);
-            }
-        });
-    }
-
     async handleTimeTrackingClick() {
         const { currentUser } = this.props,
             { timeTracking } = this.state,
             now = new Date();
-        let location = await this.getCurrentLocation(),
+        let location = await getCurrentLocation(),
             postBody = {};
 
-        this.requestNotificationPermission();
+        requestNotificationPermission();
 
         if (timeTracking) {
             // Update vorhandene Arbeitszeit
@@ -212,19 +188,6 @@ export default class Zeiterfassung extends Component {
         // Falls der Request nicht funktioniert, weil keine Internetverbindung besteht, soll der Service Worker diesen Request
         // zur Background Sync Queue hinzufügen, um den Request später zu verarbeiten
         API.getInstance()._fetch('/working-time', 'POST', postBody);
-    }
-
-    requestNotificationPermission() {
-        if (!('Notification' in window)) {
-            alert('Notification API not supported!');
-            return;
-        }
-
-        Notification.requestPermission(function (result) {
-            if (result === 'denied') {
-                confirm('Du erhältst keine Benachrichtung, wenn deine offline erfassten Arbeitszeiten erfolgreich mit dem Server synchronisiert wurden.');
-            }
-        });
     }
 
     // Hole Arbeitszeiten aus der LocalDB, sortiere die Daten nach Startzeit und update den state

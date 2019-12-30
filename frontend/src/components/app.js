@@ -111,7 +111,7 @@ export default class App extends Component {
 					<AuthComponent path='/' component={Tabs} currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
 					<AuthComponent path='/profil' component={Tabs} currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
 					<AuthComponent path='/mitarbeiter' component={Tabs} requiredRole='Administrator' currentUser={currentUser} currentUserChanged={this.updateCurrentUser.bind(this)} />
-					<AuthComponent path='/terminal' component={Terminal} requiredRole='Terminal' />
+					<AuthComponent path='/terminal' component={Terminal} currentUser={currentUser} requiredRole='Terminal' />
 					<Login path='/login' onLogin={this.updateCurrentUser.bind(this)} />
 					<Logout path='/logout' onLogout={this.updateCurrentUser.bind(this)} />
 					<Invitation path='/user/invitation/:id' />
