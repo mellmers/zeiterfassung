@@ -68,3 +68,10 @@ workbox.routing.registerRoute(
     }),
     'POST'
 );
+
+// Klick auf die Benachrichtigung öffnet die Webseite und entfernt die Benachrichtigung aus dem Benachrichtigungs-Feed
+// Quelle: https://developers.google.com/web/updates/2016/01/notification-actions
+self.addEventListener('notificationclick', function(event) {
+    event.notification.close();
+    clients.openWindow('/');
+}, false);
