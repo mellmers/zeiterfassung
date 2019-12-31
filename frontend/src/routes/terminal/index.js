@@ -92,21 +92,32 @@ export default class Terminal extends Component {
             alert(data);
             alert(parseInt(data));
 
-            LocalDB.users.where({ staffNumber: parseInt(data) }).each( users => {
-                alert(users);
-                if (users && users.length === 1) {
-                    this.toggleTimeTracking(users[0]);
-                } else {
-                    ons.notification.toast({
-                        buttonLabel: 'Ok',
-                        force: true,
-                        message: 'Keinen Benutzer gefunden. QR-Code falsch?',
-                        timeout: 3000
-                    });
-                }
-            }).catch(error => {
-                console.error(error.stack || error);
-            });
+            if (!isNan(parseInt(data))) {
+                LocalDB.users.where({staffNumber: parseInt(data)}).each(user => {
+                    alert(user);
+                    if (user) {
+                        this.toggleTimeTracking(user);
+                    } else {
+                        ons.notification.toast({
+                            buttonLabel: 'Ok',
+                            force: true,
+                            message: 'Keinen Benutzer gefunden. QR-Code falsch?',
+                            timeout: 3000
+                        });
+                    }
+                }).catch(error => {
+                    alert(error);
+                    console.error(error.stack || error);
+                });
+            } else {
+                // Wenn keine Zahl, dann zeige Fehlermeldung
+                ons.notification.toast({
+                    buttonLabel: 'Ok',
+                    force: true,
+                    message: 'Keinen Benutzer gefunden. QR-Code falsch?',
+                    timeout: 3000
+                });
+            }
         }
     }
 
