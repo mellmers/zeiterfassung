@@ -1,4 +1,4 @@
-import {Component} from 'preact';
+import {Component, Fragment} from 'preact';
 import ons from 'onsenui';
 import {Button, Input, Page} from 'react-onsenui';
 import QRReader from 'react-qr-reader';
@@ -94,7 +94,7 @@ export default class Terminal extends Component {
             alert(!isNaN(parseInt(data)));
 
             if (!isNaN(parseInt(data))) {
-                LocalDB.users.where({staffNumber: parseInt(data)}).each(user => {
+                LocalDB.users.where({staffNumber: parseInt(data)}).first(user => {
                     alert(user ? user.firstName : 'no user');
                     if (user) {
                         this.toggleTimeTracking(user);
@@ -103,7 +103,7 @@ export default class Terminal extends Component {
                             buttonLabel: 'Ok',
                             force: true,
                             message: 'Keinen Benutzer gefunden. QR-Code falsch?',
-                            timeout: 3000
+                            timeout: 5000
                         });
                     }
                 }).catch(error => {
@@ -116,7 +116,7 @@ export default class Terminal extends Component {
                     buttonLabel: 'Ok',
                     force: true,
                     message: 'Keinen Benutzer gefunden. QR-Code falsch?',
-                    timeout: 3000
+                    timeout: 5000
                 });
             }
         }
@@ -131,6 +131,10 @@ export default class Terminal extends Component {
         this.setState({ showQRScanner: true });
     }
 
+    closeQRCodeScanner() {
+        this.setState({ showQRScanner: false });
+    }
+
     async toggleTimeTracking(user) {
         const timeTracking = await this.isTimeTracking(user),
             now = new Date();
@@ -140,6 +144,8 @@ export default class Terminal extends Component {
             };
 
         requestNotificationPermission();
+
+        alert('toggle time tracking: ' + timeTracking);
 
         if (timeTracking) {
             // Update vorhandene Arbeitszeit
@@ -236,12 +242,15 @@ export default class Terminal extends Component {
 
         if (state.showQRScanner) {
             return (
-                <QRReader
-                    delay={300}
-                    onError={this.handleError.bind(this)}
-                    onScan={this.handleScan.bind(this)}
-                    style={{ width: '100%', maxHeight: '100%' }}
-                />
+                <Fragment>
+                    <QRReader
+                        delay={300}
+                        onError={this.handleError.bind(this)}
+                        onScan={this.handleScan.bind(this)}
+                        style={{ width: '100%', maxHeight: '100%' }}
+                    />
+                    <Button onClick={this.closeQRCodeScanner.bind(this)}>Schließen</Button>
+                </Fragment>
             );
         }
 
