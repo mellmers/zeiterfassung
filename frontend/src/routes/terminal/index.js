@@ -89,7 +89,11 @@ export default class Terminal extends Component {
         if (data) {
             this.setState({ showQRScanner: false });
 
+            alert(data);
+            alert(parseInt(data));
+
             LocalDB.users.where({ staffNumber: parseInt(data) }).each( users => {
+                alert(users);
                 if (users && users.length === 1) {
                     this.toggleTimeTracking(users[0]);
                 } else {
