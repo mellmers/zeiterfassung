@@ -78,9 +78,6 @@ export default class Terminal extends Component {
                     });
                     this.setState({ disableActions: false });
                 }
-            }).catch(error => {
-                console.error(error.stack || error);
-                this.setState({ disableActions: false });
             });
         }
     }
@@ -89,13 +86,8 @@ export default class Terminal extends Component {
         if (data) {
             this.setState({ showQRScanner: false });
 
-            alert(data);
-            alert(parseInt(data));
-            alert(!isNaN(parseInt(data)));
-
             if (!isNaN(parseInt(data))) {
                 LocalDB.users.where({staffNumber: parseInt(data)}).first(user => {
-                    alert(user ? user.firstName : 'no user');
                     if (user) {
                         this.toggleTimeTracking(user);
                     } else {
@@ -106,9 +98,6 @@ export default class Terminal extends Component {
                             timeout: 5000
                         });
                     }
-                }).catch(error => {
-                    alert(error);
-                    console.error(error.stack || error);
                 });
             } else {
                 // Wenn keine Zahl, dann zeige Fehlermeldung
@@ -123,7 +112,7 @@ export default class Terminal extends Component {
     }
 
     handleError(err) {
-        alert(err);
+        alert('QR-Code Error: ' + err);
         this.setState({ showQRScanner: false });
     }
 
@@ -144,8 +133,6 @@ export default class Terminal extends Component {
             };
 
         requestNotificationPermission();
-
-        alert('toggle time tracking: ' + timeTracking);
 
         if (timeTracking) {
             // Update vorhandene Arbeitszeit
@@ -249,7 +236,7 @@ export default class Terminal extends Component {
                         onScan={this.handleScan.bind(this)}
                         style={{ width: '100%', maxHeight: '100%' }}
                     />
-                    <Button onClick={this.closeQRCodeScanner.bind(this)}>Schließen</Button>
+                    <Button onClick={this.closeQRCodeScanner.bind(this)} style={{margin: '25px auto'}}>Schließen</Button>
                 </Fragment>
             );
         }
