@@ -236,7 +236,7 @@ export default class Terminal extends Component {
                         onScan={this.handleScan.bind(this)}
                         style={{ width: '100%', maxHeight: '100%' }}
                     />
-                    <Button className={styles.qrReaderCloseBtn} onClick={this.closeQRCodeScanner.bind(this)}>Schließen</Button>
+                    <Button onClick={this.closeQRCodeScanner.bind(this)} style={{display: 'block', margin: '30px auto', width: '250px', maxWidth: '100%'}}>Schließen</Button>
                 </Fragment>
             );
         }
