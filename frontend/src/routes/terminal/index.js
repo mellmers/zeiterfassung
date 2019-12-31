@@ -89,9 +89,9 @@ export default class Terminal extends Component {
         if (data) {
             this.setState({ showQRScanner: false });
 
-            LocalDB.users.where({ staffNumber: parseInt(data) }).first( user => {
-                if (user) {
-                    this.toggleTimeTracking(user);
+            LocalDB.users.where({ staffNumber: parseInt(data) }).each( users => {
+                if (users && users.length === 1) {
+                    this.toggleTimeTracking(users[0]);
                 } else {
                     ons.notification.toast({
                         buttonLabel: 'Ok',
