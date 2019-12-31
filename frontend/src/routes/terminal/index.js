@@ -94,8 +94,8 @@ export default class Terminal extends Component {
             alert(!isNaN(parseInt(data)));
 
             if (!isNaN(parseInt(data))) {
-                LocalDB.users.where({staffNumber: parseInt(data)}).first(user => {
-                    alert(user);
+                LocalDB.users.where({staffNumber: parseInt(data)}).each(user => {
+                    alert(user ? user.firstName : 'no user');
                     if (user) {
                         this.toggleTimeTracking(user);
                     } else {
