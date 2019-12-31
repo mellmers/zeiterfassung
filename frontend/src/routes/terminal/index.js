@@ -91,9 +91,9 @@ export default class Terminal extends Component {
 
             alert(data);
             alert(parseInt(data));
-            alert(!isNan(parseInt(data)));
+            alert(!isNaN(parseInt(data)));
 
-            if (!isNan(parseInt(data))) {
+            if (!isNaN(parseInt(data))) {
                 LocalDB.users.where({staffNumber: parseInt(data)}).first(user => {
                     alert(user);
                     if (user) {
