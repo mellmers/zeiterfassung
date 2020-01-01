@@ -55,7 +55,7 @@ export default class StaffDetails extends Component {
                 console.log('Fehler beim Teilen: ', err);
             }
         } else {
-            alert('Dieser Browser unterstützt die native Teilen-Funktionalität leider nicht.');
+            alert('Dieser Browser unterstützt die native Teilen-Funktionalität leider nicht. Der Einladungslink lautet: ' + invitationLink);
         }
     }
 
