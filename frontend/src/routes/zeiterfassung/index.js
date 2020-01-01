@@ -37,21 +37,20 @@ export default class Zeiterfassung extends Component {
 
     componentDidMount() {
         // Shake-Detection, Quelle: https://github.com/alexgibson/shake.js/
-        // Ein Teil des Quellcodes habe ich hier verwendet, um die Schüttel-Geste des Smartphones zu erkennen
-        // Dabei wird die "Device Orientation API" benutzt, um die Beschleunigung des Geräts auszulesen
+        // Ein Teil des Quellcodes habe ich hier verwendet, um die Schüttel-Geste des Smartphones zu erkennen.
+        // Dabei wird die "Device Orientation API" benutzt, um die Beschleunigung des Geräts auszulesen.
         //
-        // Determine if the DeviceMotionEvent is supported using feature detection.
-        if (window.DeviceMotionEvent) {
-            const threshold = 5, // shake strength threshold
-                timeout = 1000; // determines the frequency of event generation
+        // Überprüfe, ob DeviceMotionEvent vom Browser unterstützt wird
+        if ('DeviceMotionEvent' in window) {
+            const threshold = 5, // Startschwelle für das Erkennen der Geste
+                timeout = 1000; // Intervall zwischen dem Aufruf der Geste
 
+            // Verwende das Datum, um zu verhindern, dass mehrere Schüttel-Gesten kurz nacheinander ausgelöst werden
             let lastTime = new Date(),
                 lastX = null,
                 lastY = null,
                 lastZ = null;
 
-            // The device motion event returns data about the rotation and acceleration information
-            // of the device. The event returns two properties: acceleration and accelerationIncludingGravity
             window.addEventListener('devicemotion', e => {
                 let current = e.accelerationIncludingGravity,
                     currentTime,
@@ -69,13 +68,12 @@ export default class Zeiterfassung extends Component {
                     deltaZ = Math.abs(lastZ - current.z);
 
                 if (((deltaX > threshold) && (deltaY > threshold)) || ((deltaX > threshold) && (deltaZ > threshold)) || ((deltaY > threshold) && (deltaZ > threshold))) {
-                    //calculate time in milliseconds since last shake registered
+                    // Berechne die Zeit in Millisekunden seit der letzten registrierten Schüttel-Geste
                     currentTime = new Date();
                     timeDifference = currentTime.getTime() - lastTime.getTime();
 
-                    // Starte/Stoppe Zeiterfassung
                     if (timeDifference > timeout) {
-                        this.handleTimeTrackingClick();
+                        this.handleTimeTrackingClick(); // Starte/Stoppe Zeiterfassung
                         lastTime = new Date();
                     }
                 }
