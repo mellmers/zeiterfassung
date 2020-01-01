@@ -1,9 +1,10 @@
 import { Component } from 'preact';
 import { Page } from 'react-onsenui';
 
-import QRCode from '../../components/QRCode';
-
 import EditProfile from './../../components/editProfile';
+import QRCode from './../../components/QRCode';
+
+import styles from './styles.scss';
 
 export default class Profile extends Component {
 
@@ -12,7 +13,7 @@ export default class Profile extends Component {
 			<Page>
 				<EditProfile {...props} />
 
-				<QRCode value={'' + props.user.staffNumber} />
+				<QRCode value={'' + props.user.staffNumber} btnClassName={styles.btnQR} />
 			</Page>
 		);
 	}

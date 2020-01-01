@@ -74,7 +74,7 @@ export default class StaffDetails extends Component {
                 </Toolbar>
 
                 <EditProfile user={props.user} userChanged={this.onUserChanged.bind(this)} roleEditable />
-                {props.currentUser && props.currentUser._id !== props.user._id ? <Button onClick={this.deleteStaff.bind(this)} style={{ backgroundColor: 'red' }}>Mitarbeiter löschen</Button> : null}
+                {props.currentUser && props.currentUser._id !== props.user._id ? <Button onClick={this.deleteStaff.bind(this)} style={{ backgroundColor: 'red', display: 'table', margin: '15px 0' }}>Mitarbeiter löschen</Button> : null}
 
                 <QRCode btnClassName={styles.btnQR} value={'' + props.user.staffNumber} id={'staff-' + props.user.staffNumber} />
 
