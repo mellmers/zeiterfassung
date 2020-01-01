@@ -36,7 +36,9 @@ export default class Zeiterfassung extends Component {
     }
 
     componentDidMount() {
-        // Shake-Detection (Modified), Quelle: https://github.com/alexgibson/shake.js/
+        // Shake-Detection, Quelle: https://github.com/alexgibson/shake.js/
+        // Ein Teil des Quellcodes habe ich hier verwendet, um die Schüttel-Geste des Smartphones zu erkennen
+        // Dabei wird die "Device Orientation API" benutzt, um die Beschleunigung des Geräts auszulesen
         //
         // Determine if the DeviceMotionEvent is supported using feature detection.
         if (window.DeviceMotionEvent) {
