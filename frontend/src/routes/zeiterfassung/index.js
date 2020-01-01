@@ -51,7 +51,7 @@ export default class Zeiterfassung extends Component {
                 lastZ = null;
 
             // The device motion event returns data about the rotation and acceleration information
-            // of the device. The event returns two properties: acceleration and accelerationIncldingGravity
+            // of the device. The event returns two properties: acceleration and accelerationIncludingGravity
             window.addEventListener('devicemotion', e => {
                 let current = e.accelerationIncludingGravity,
                     currentTime,
