@@ -44,9 +44,13 @@ export function getCurrentLocation() {
 
 // Quelle: https://whatwebcando.today/local-notifications.html
 export function requestNotificationPermission() {
-    if (!('Notification' in window) && localStorage.getItem('notificationApiNotWorkingAlreadyShown') !== 'true') {
-        confirm('Die Notification API wird von diesem Browser nicht unterstützt. Du kannst daher keine Benachrichtung erhalten, wenn deine offline erfassten Arbeitszeiten mit dem Server synchronisiert wurden.');
-        localStorage.setItem('notificationApiNotWorkingAlreadyShown', 'true');
+    if (!('Notification' in window)) {
+        // Benachrichtung nur anzeigen, wenn diese noch nie angezeigt wurde
+        if (localStorage.getItem('notificationApiNotWorkingAlreadyShown') !== 'true') {
+            confirm('Die Notification API wird von diesem Browser nicht unterstützt. Du kannst daher keine Benachrichtung erhalten, wenn deine offline erfassten Arbeitszeiten mit dem Server synchronisiert wurden.');
+            localStorage.setItem('notificationApiNotWorkingAlreadyShown', 'true');
+        }
+
         return;
     }
 
