@@ -41,6 +41,7 @@ export default class App extends Component {
 
 		// PWA Installationsaufforderung abfangen und für später speichern
 		window.addEventListener('beforeinstallprompt', function (e) {
+			e.preventDefault(); // Installationsaufforderung nicht automatisch anzeigen
 			window.deferredInstallPrompt = e;
 		});
 	}
