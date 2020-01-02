@@ -1,6 +1,6 @@
 import {Component} from 'preact';
 import ons from 'onsenui';
-import {BackButton, Button, Page, Toolbar} from 'react-onsenui';
+import {BackButton, Button, Input, Page, Toolbar} from 'react-onsenui';
 
 import EditProfile from './../editProfile';
 import QRCode from './../QRCode';
@@ -54,8 +54,11 @@ export default class StaffDetails extends Component {
             } catch(err) {
                 console.log('Fehler beim Teilen: ', err);
             }
-        } else {
-            alert('Dieser Browser unterstützt die native Teilen-Funktionalität leider nicht. Der Einladungslink lautet: ' + invitationLink);
+        } else if (localStorage.getItem('shareApiNotWorkingAlreadyShown') !== 'true') {
+            confirm('Dieser Browser unterstützt die native Teilen-Funktionalität leider nicht. Der Einladungslink lautet: ' + invitationLink);
+            // Nach erstem Klick, wird abgespeichert, dass die Fehlermeldung bereits einmal gezeigt wurde,
+            // damit diese in Zukunft nicht mehr gezeigt wird
+            localStorage.setItem('shareApiNotWorkingAlreadyShown', 'true');
         }
     }
 
@@ -78,7 +81,22 @@ export default class StaffDetails extends Component {
 
                 <QRCode btnClassName={styles.btnQR} value={'' + props.user.staffNumber} id={'staff-' + props.user.staffNumber} />
 
-                <Button className={styles.btnInvitation} onClick={this.shareInvitationLink.bind(this)}>Einladunglink teilen</Button>
+                <p>
+                    <label htmlFor='invitationLink'><strong>Einladungslink</strong></label>
+                </p>
+                <p>
+                <Input
+                    id='invitationLink'
+                    name='invitationLink'
+                    value={window.location.origin + '/user/invitation/' + props.user.invitationId}
+                    modifier='material'
+                >
+                </Input>
+                </p>
+                {
+                    // Zeige Teilen Button nur, wenn Share API unterstützt wird
+                    localStorage.getItem('shareApiNotWorkingAlreadyShown') !== 'true' ? <Button className={styles.btnInvitation} onClick={this.shareInvitationLink.bind(this)}>Einladunglink teilen</Button> : null
+                }
             </Page>
         )
     }
