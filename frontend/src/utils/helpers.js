@@ -45,7 +45,11 @@ export function getCurrentLocation() {
 // Quelle: https://developer.mozilla.org/en-US/docs/Web/API/notification
 export function requestNotificationPermission() {
     if (!('Notification' in window)) {
-        confirm('Die Notification API wird von diesem Browser nicht unterstützt. Du kannst daher keine Benachrichtung erhalten, wenn deine offline erfassten Arbeitszeiten mit dem Server synchronisiert wurden.');
+        // Benachrichtung nur anzeigen, wenn diese noch nie angezeigt wurde
+        if (localStorage.getItem('notificationApiNotWorkingAlreadyShown') !== 'true') {
+            alert('Die Notification API wird von diesem Browser nicht unterstützt. Du kannst daher keine Benachrichtung erhalten, wenn deine offline erfassten Arbeitszeiten mit dem Server synchronisiert wurden.');
+            localStorage.setItem('notificationApiNotWorkingAlreadyShown', 'true');
+        }
     } else if (Notification.permission !== 'denied') {
         // Wenn die Benachrichtung noch nicht abgelehnt wurden, dann frage den Benutzer um Erlaubnis Benachrichtigungen anzuzeigen
         Notification.requestPermission().then(function (permission) {
