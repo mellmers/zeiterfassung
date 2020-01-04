@@ -33,7 +33,7 @@ export default class AddStaff extends Component {
 
         this.setState({ disableSubmit: true });
 
-        API.getInstance()._fetch('/users/create', 'POST', userData)
+        API.getInstance()._fetch('/users', 'POST', userData)
             .then( response => {
 
                 ons.notification.toast({

@@ -58,9 +58,9 @@ const bgSyncPlugin = new workbox.backgroundSync.Plugin(bgSyncQueueName, {
         }
     }
 });
-// POST-Anfragen an den /working-time API-Endpunkt abfangen und speichern, wenn die Anwendung offline ist
+// POST-Anfragen an den /working-times API-Endpunkt abfangen und speichern, wenn die Anwendung offline ist
 workbox.routing.registerRoute(
-    'https://zeiterfassung.moritzellmers.de/api/working-time',
+    'https://zeiterfassung.moritzellmers.de/api/working-times',
     workbox.strategies.networkOnly({
         plugins: [bgSyncPlugin]
     }),

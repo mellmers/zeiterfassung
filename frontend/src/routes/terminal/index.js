@@ -29,7 +29,7 @@ export default class Terminal extends Component {
 
         // Hole Arbeitszeiten und speichere diese in LocalDB und state
         if (navigator.onLine) {
-            API.getInstance()._fetch('/working-time')
+            API.getInstance()._fetch('/working-times')
                 .then(response => {
                     if (response.status === 'success') {
                         LocalDB.localWorkingTimes.clear();
@@ -195,7 +195,7 @@ export default class Terminal extends Component {
         // Request an die API, um die Daten persistent zu speichern
         // Falls der Request nicht funktioniert, weil keine Internetverbindung besteht, soll der Service Worker diesen Request
         // zur Background Sync Queue hinzufügen, um den Request später zu verarbeiten
-        API.getInstance()._fetch('/working-time', 'POST', postBody);
+        API.getInstance()._fetch('/working-times', 'POST', postBody);
 
         // Wenn alles fertig ist, resette Login Formular
         this.setState({

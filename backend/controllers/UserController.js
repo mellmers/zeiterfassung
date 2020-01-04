@@ -9,13 +9,13 @@ const router = express.Router();
 
 // routes
 router.post('/authenticate', authenticate);
-router.post('/register', register);
-router.post('/create', create);
-router.get('/', getAll);
+router.route('/')
+    .get(getAll)
+    .post(create);
 router.route('/:id')
-    .delete(deleteUser)
     .get(getUserById)
-    .patch(updateUser);
+    .patch(updateUser)
+    .delete(deleteUser);
 router.get('/invitation/:id', getUserByInvitation);
 
 export default router;
@@ -63,28 +63,6 @@ function authenticate(req, res, next) {
                 res.status(401).json({status: 'error', message: 'Personalnummer oder Pin falsch'});
             }
         });
-}
-
-async function register(req, res, next) {
-    // TODO: Generate 4 digit pin code in frontend
-    let user = {
-        familyName: req.body.familyName,
-        firstName: req.body.firstName,
-        invitationId: generateUUIDVersion4(),
-        pinCode: bcrypt.hashSync(req.body.pinCode, saltRounds),
-        role: 'Mitarbeiter'
-    };
-
-    await UserModel.create(user, (err, user) => {
-        if (err) {
-            res.status(400).json({
-                status: 'error',
-                message: 'Benutzer konnte nicht angelegt werden. Grund: ' + err.message || err.errmsg
-            });
-        } else if (user) {
-            res.status(201).json({status: 'success', message: 'Benutzer erfolgreich angelegt', data: {user: user}});
-        }
-    });
 }
 
 async function create(req, res, next) {

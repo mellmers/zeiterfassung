@@ -30,7 +30,7 @@ app.use('/api', jwt());
 
 // api routes
 app.use('/api/users', UserController);
-app.use('/api/working-time', WorkingTimeController);
+app.use('/api/working-times', WorkingTimeController);
 
 // global error handler
 app.use(errorHandler);

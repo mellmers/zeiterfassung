@@ -22,7 +22,7 @@ export default class Zeiterfassung extends Component {
 
     componentWillMount() {
         if (navigator.onLine) {
-            API.getInstance()._fetch('/working-time')
+            API.getInstance()._fetch('/working-times')
                 .then(response => {
                     if (response.status === 'success') {
                         LocalDB.localWorkingTimes.clear();
@@ -187,7 +187,7 @@ export default class Zeiterfassung extends Component {
         // Request an die API, um die Daten persistent zu speichern
         // Falls der Request nicht funktioniert, weil keine Internetverbindung besteht, soll der Service Worker diesen Request
         // zur Background Sync Queue hinzufügen, um den Request später zu verarbeiten
-        API.getInstance()._fetch('/working-time', 'POST', postBody);
+        API.getInstance()._fetch('/working-times', 'POST', postBody);
     }
 
     // Hole Arbeitszeiten aus der LocalDB, sortiere die Daten nach Startzeit und update den state
