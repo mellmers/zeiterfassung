@@ -1,6 +1,6 @@
 # Zeiterfassung (PWA)
 
-## CLI Commands
+## Preact CLI Commands
 
 ``` bash
 # install dependencies

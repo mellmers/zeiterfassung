@@ -9,12 +9,15 @@ Progressive Web App am Beispiel einer Zeiterfassungsanwendung
 (Entwickelt und getestet mit Windows 10)
 
 ## Installation und starten der Anwendung
+Schritt 1 ist überflüssig, wenn der Quellcode bereits vorliegt (z.B. gezippte Dateien bereits entpackt).
 
 ##### 1. Klone das Git-Repository auf deinen PC and wechsel in den Installationsordner
 ```bash
 git clone https://github.com/mellmers/zeiterfassung.git zeiterfassung && cd zeiterfassung
 ```
   
+Schritt 2 ist überflüssig, wenn der Ordner 'node_modules' unterhalb der Verzeichnisse 'backend' und 'frontend' existieren.
+
 ##### 2. Installiere alle Abhängigkeiten
 ```bash
 # Backend
@@ -35,11 +38,16 @@ npm start
 ##### 4. PWA starten
 ```bash
 cd frontend
-npm start
+npm run start:development
 ```
 
-## Production Startup
-Klonen und Abhängigkeiten wie in "Installation und starten der Anwendung" beschrieben.
+## Installation auf einem Webserver
+Hier wird beschrieben, wie die Anwendung auf einem Webserver installiert werden könnte.
+Für lokale Tests ist dies nicht notwendig. Allerdings muss dabei beachtet werden, dass lokal einige
+Funktionen wie Installation, Benachrichtigungen oder Standortermittlung nicht funktionieren,
+weil der lokale Webserver kein HTTPS kann.
+
+**Klonen und Abhängigkeiten installieren wie in "Installation und starten der Anwendung" beschrieben.**
 
 #### Api starten
 Die NodeJS Anwendung muss mit einem Daemon-Prozessmanager (z.B. [PM2](https://pm2.keymetrics.io/)) oder in einem [Linux-screen](https://wiki.ubuntuusers.de/Screen/) gestartet werden. Damit wird garantiert, dass die Anwendung auch bei geschlossener SSH-Verbindung weiterhin aktiv ist.
@@ -51,12 +59,13 @@ pm2 save
 ```
 
 #### Frontend
+Die Dateien für das Frontend müssen erstellt werden und mit einem Apache oder Nginx ausgeliefert werden.
 ```bash
 cd frontend
 npm run build
 ```
 
-#### Apache Konfiguration
+#### Apache Konfiguration (Beispiel)
 Abschließend wird eine Apache Konfiguration benötigt, um die Dateien korrekt an den Client ausliefern zu können.
 
 Beispiel:
