@@ -2,6 +2,8 @@ import { Component } from 'preact';
 import ons from 'onsenui';
 import { Button, Icon, Page } from 'react-onsenui';
 
+import WorkingTimesTable from './../../components/workingTimesTable';
+
 import API from './../../utils/API';
 import {getCurrentLocation, requestNotificationPermission} from './../../utils/helpers';
 import LocalDB from './../../utils/LocalDB';
@@ -257,68 +259,6 @@ export default class Zeiterfassung extends Component {
         );
     }
 
-    renderWorkingTimes() {
-        const { workingTimes } = this.state;
-        const days = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
-
-        if (workingTimes.length <= 0) return;
-
-        return (
-            <table className={styles.workingTimesTable} cellspacing='10'>
-                <thead>
-                    <tr>
-                        <th>Tag</th>
-                        <th>Datum</th>
-                        <th>Von</th>
-                        <th>Bis</th>
-                        <th>Dauer</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {workingTimes.map( (wT, index) => {
-                        let start = new Date(wT.start.time),
-                            end = null,
-                            durationString = '-';
-                        
-                        if (wT.end && wT.end.time) {
-                            end = new Date(wT.end.time);
-
-                            // Dauer berechnen (Zeitdifferenz zwischen Start und Ende)
-                            let timeDifference = end - start,
-                                duration = {};
-
-                            let secondsInADay = 60 * 60 * 1000 * 24,
-                                secondsInAHour = 60 * 60 * 1000;
-
-                            duration.hours = Math.floor(timeDifference / secondsInAHour);
-                            duration.minutes = Math.floor(((timeDifference % (secondsInADay)) % (secondsInAHour)) / (60 * 1000));
-                            duration.seconds = Math.floor((((timeDifference % (secondsInADay)) % (secondsInAHour)) % (60 * 1000)) / 1000);
-
-                            durationString = '';
-                            if (duration.hours > 0) {
-                                durationString += duration.hours + ' h ';
-                            }
-                            if (duration.hours > 0 || duration.minutes > 0) {
-                                durationString += duration.minutes + ' m ';
-                            }
-                            durationString += duration.seconds + ' s';
-                        }
-
-                        return (
-                            <tr key={index}>
-                                <td>{days[start.getDay()]}{end && start.getDay() !== end.getDay() ? ' - ' + days[end.getDay()] : null}</td>
-                                <td>{start.toLocaleDateString()}{end && start.toLocaleDateString() !== end.toLocaleDateString() ? ' - ' + end.toLocaleDateString() : null}</td>
-                                <td>{start.toLocaleTimeString()}</td>
-                                <td>{end ? end.toLocaleTimeString() : '-'}</td>
-                                <td style={{textAlign: 'right'}}>{durationString.replace(/ /g, '\u00a0')}</td>
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
-        );
-    }
-
     render(props, { timer, timeTracking, workingTimes }, context) {
         return (
             <Page>
@@ -336,7 +276,7 @@ export default class Zeiterfassung extends Component {
                     </Button>
 
                     {this.renderTimer()}
-                    {this.renderWorkingTimes()}
+                    <WorkingTimesTable workingTimes={workingTimes} position='center' />
                 </div>
             </Page>
         );

@@ -4,12 +4,26 @@ import {BackButton, Button, Input, Page, Toolbar} from 'react-onsenui';
 
 import EditProfile from './../editProfile';
 import QRCode from './../QRCode';
+import WorkingTimesTable from './../workingTimesTable';
 
 import API from './../../utils/API';
 
 import styles from './styles.scss';
 
 export default class StaffDetails extends Component {
+
+    state = {
+        workingTimes: []
+    };
+
+    componentWillMount() {
+        API.getInstance()._fetch('/working-times/' + this.props.user._id)
+            .then(response => {
+                if (response.status === 'success') {
+                   this.setState({ workingTimes : response.data.workingTimes });
+                }
+            });
+    }
 
     deleteStaff() {
         ons.notification.confirm('Mitarbeiter (' + this.props.user.firstName + ' ' + this.props.user.familyName + ') wirklich löschen?').then( accepted => {
@@ -62,7 +76,7 @@ export default class StaffDetails extends Component {
         }
     }
 
-    render(props, state, context) {
+    render(props, { workingTimes }, context) {
         return (
             <Page className={styles.staffDetail}>
                 <Toolbar>
@@ -97,6 +111,11 @@ export default class StaffDetails extends Component {
                     // Zeige Teilen Button nur, wenn Share API unterstützt wird
                     localStorage.getItem('shareApiNotWorkingAlreadyShown') !== 'true' ? <Button className={styles.btnInvitation} onClick={this.shareInvitationLink.bind(this)}>Einladunglink teilen</Button> : null
                 }
+
+                <p>
+                    <label><strong>Arbeitszeiten</strong></label>
+                </p>
+                <WorkingTimesTable workingTimes={workingTimes} />
             </Page>
         )
     }
