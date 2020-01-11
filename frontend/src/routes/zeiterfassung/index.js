@@ -38,8 +38,8 @@ export default class Zeiterfassung extends Component {
         //
         // Überprüfe, ob DeviceMotionEvent vom Browser unterstützt wird
         if ('DeviceMotionEvent' in window) {
-            const threshold = 5, // Startschwelle für das Erkennen der Geste
-                timeout = 1000; // Intervall zwischen dem Aufruf der Geste
+            const threshold = 7, // Startschwelle für das Erkennen der Geste
+                timeout = 2000; // Intervall zwischen dem Aufruf der Geste
 
             // Verwende das Datum, um zu verhindern, dass mehrere Schüttel-Gesten kurz nacheinander ausgelöst werden
             let lastTime = new Date(),
