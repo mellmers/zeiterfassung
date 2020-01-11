@@ -10,6 +10,7 @@ const router = express.Router();
 router.route('/')
     .post(toggleTracking)
     .get(getAll);
+router.get('/:userId', getWorkingTimesByUserId);
 
 export default router;
 
@@ -127,5 +128,22 @@ async function getAll(req, res, next) {
                 res.json({status: 'success', message: 'Deine Arbeitszeiten wurden erfolgreich abgefragt', data: {workingTimes: workingTimes}});
             }
         });
+    }
+}
+
+async function getWorkingTimesByUserId(req, res, next) {
+    if (await UserIsAdmin(req.user.id, next)) {
+        WorkingTimeModel.find({ userId: req.params.userId }, (err, workingTimes) => {
+            if (err) {
+                res.status(400).json({
+                    status: 'error',
+                    message: 'Abfrage der Arbeitszeiten gescheitert. Grund: ' + err.message || err.errmsg
+                });
+            } else if (workingTimes) {
+                res.json({status: 'success', message: 'Arbeitszeiten des Benutzers ' + req.params.userId + ' erfolgreich abgefragt', data: {workingTimes: workingTimes}});
+            }
+        });
+    } else {
+        res.status(403).json({status: 'error', message: 'Zugriff verweigert'});
     }
 }
