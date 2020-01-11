@@ -7,7 +7,7 @@ import {generateUUIDVersion4, isRequestedUser, isRequestedUserOrAdmin, UserIsAdm
 
 const router = express.Router();
 
-// routes
+// Routen
 router.post('/authenticate', authenticate);
 router.route('/')
     .get(getAll)
@@ -22,7 +22,7 @@ export default router;
 
 const saltRounds = 10;
 
-// Controller methods
+// Controller Methoden
 function authenticate(req, res, next) {
     const {staffNumber, pinCode} = req.body;
     UserModel
@@ -66,7 +66,6 @@ function authenticate(req, res, next) {
 }
 
 async function create(req, res, next) {
-    // TODO: Generate 4 digit pin code in frontend
     let user = {
         familyName: req.body.familyName,
         firstName: req.body.firstName,

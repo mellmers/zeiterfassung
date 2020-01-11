@@ -6,7 +6,7 @@ import {UserIsAdmin, UserIsTerminal} from '../utils/helpers';
 
 const router = express.Router();
 
-// routes
+// Routen
 router.route('/')
     .post(toggleTracking)
     .get(getAll);
@@ -14,8 +14,7 @@ router.get('/:userId', getWorkingTimesByUserId);
 
 export default router;
 
-// Controller methods
-
+// Controller Methoden
 async function toggleTracking(req, res, next) {
     const {start, end, longitude, latitude} = req.body;
     let userId = req.user.id,
@@ -50,7 +49,6 @@ async function toggleTracking(req, res, next) {
                 };
                 wT.updatedAt = now;
 
-                // Oldenburg: 8.1506953 | 53.1441014
                 if (longitude && latitude) {
                     wT.end.location = {type: 'Point', coordinates: [longitude, latitude]};
                 }
@@ -75,7 +73,6 @@ async function toggleTracking(req, res, next) {
                     userId: userId
                 };
 
-                // Oldenburg: 8.1506953 | 53.1441014
                 if (longitude && latitude) {
                     wT.start.location = {type: 'Point', coordinates: [longitude, latitude]};
                 }

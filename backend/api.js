@@ -1,19 +1,18 @@
 import 'dotenv/config';
 import express from 'express';
-// import cors from 'cors';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
 
 import jwt from './utils/jwt';
 import errorHandler from './utils/errorHandler';
-import mongoose from './utils/database'; //database
+import mongoose from './utils/database'; // Hier wird die Datenbankverbindung aufgebaut
 
 import UserController from './controllers/UserController';
 import WorkingTimeController from './controllers/WorkingTimeController';
 
 let app = express();
 
-// connection to mongodb
+// Starte API, wenn Datenbankverbindung steht
 mongoose.connection.on('error', console.error.bind(console, 'MongoDB connection error:'));
 mongoose.connection.once('open', function () {
     console.log('MongoDB connect successfully!');
@@ -23,19 +22,22 @@ mongoose.connection.once('open', function () {
     });
 });
 
+// Console logging
 app.use(logger('dev'));
+
+// Request body parsing
 app.use(bodyParser.urlencoded({ extended: false }));
-//app.use(cors());
+
+//
 app.use('/api', jwt());
 
-// api routes
+// Routing
 app.use('/api/users', UserController);
 app.use('/api/working-times', WorkingTimeController);
 
 // global error handler
 app.use(errorHandler);
 
-// general info
 app.get('/api/ping', (req, res) => {
     return res.json({
         message: 'pong'

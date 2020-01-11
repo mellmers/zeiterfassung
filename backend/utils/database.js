@@ -5,6 +5,7 @@ let login = '';
 if (u && p) {
     login = u + ':' + p + '@';
 }
+// Datenbankverbindung aufbauen
 mongoose.connect('mongodb://' + login + 'localhost/' + (process.env.DB_NAME || 'zeiterfassung'), {
     useCreateIndex: true,
     useNewUrlParser: true,

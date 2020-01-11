@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-// Define Point schema - https://mongoosejs.com/docs/geojson.html
+// Definition des Punktschemas - https://mongoosejs.com/docs/geojson.html
 const pointSchema = new mongoose.Schema({
     type: {
         type: String,
@@ -13,7 +13,7 @@ const pointSchema = new mongoose.Schema({
     }
 });
 
-// Define the WorkingTime schema
+// Definition des Arbeitszeitschemas
 const Schema = mongoose.Schema;
 const WorkingTimeSchema = new Schema({
     start: {
@@ -30,7 +30,5 @@ const WorkingTimeSchema = new Schema({
         required: true
     }
 }, { timestamps: {} });
-
-// WorkingTimeSchema.set('autoIndex', false);
 
 export default mongoose.model('WorkingTime', WorkingTimeSchema);

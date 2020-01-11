@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
-// Define the user schema
+// Definition des Benutzerschemas
 const Schema = mongoose.Schema;
 const UserSchema = new Schema({
     familyName: {
@@ -28,7 +28,5 @@ const UserSchema = new Schema({
 }, { timestamps: {} });
 
 UserSchema.plugin(AutoIncrement, { id: 'staffNumberSeq', inc_field: 'staffNumber' });
-
-// UserSchema.set('autoIndex', false);
 
 export default mongoose.model('User', UserSchema);
