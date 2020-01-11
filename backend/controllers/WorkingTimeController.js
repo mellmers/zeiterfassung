@@ -58,7 +58,7 @@ async function toggleTracking(req, res, next) {
                     responseWT = updatedWorkingTime;
                     res.status(201).json({
                         status: 'success',
-                        message: 'Arbeitszeiterfassung gestoppt',
+                        message: 'Arbeitszeiterfassung beendet',
                         data: { workingTime: responseWT }
                     });
                 }).catch(err => {

@@ -134,54 +134,57 @@ export default class Terminal extends Component {
 
         requestNotificationPermission();
 
-        if (timeTracking) {
-            // Update vorhandene Arbeitszeit
-            await LocalDB.localWorkingTimes.where({ userId: user._id }).reverse().toArray().then(async workingTimes => {
-                for (let key in workingTimes) {
-                    if (!workingTimes[key].hasOwnProperty('end')) {
-                        await LocalDB.localWorkingTimes.update(workingTimes[key].id, {
-                            end: {
-                                time: now,
-                                location: location
-                            },
-                            updatedAt: now
-                        });
+        // Falls keine Verbindung besteht, setze Arbeitszeit basierend auf den Daten in der LocalDB
+        if (!navigator.onLine) {
+            if (timeTracking) {
+                // Update vorhandene Arbeitszeit
+                await LocalDB.localWorkingTimes.where({ userId: user._id }).reverse().toArray().then(async workingTimes => {
+                    for (let key in workingTimes) {
+                        if (!workingTimes[key].hasOwnProperty('end')) {
+                            await LocalDB.localWorkingTimes.update(workingTimes[key].id, {
+                                end: {
+                                    time: now,
+                                    location: location
+                                },
+                                updatedAt: now
+                            });
 
-                        // Speichere Endzeit, um diese an die Datenbank zu schicken
-                        postBody.end = now;
+                            // Speichere Endzeit, um diese an die Datenbank zu schicken
+                            postBody.end = now;
 
-                        break;
+                            break;
+                        }
                     }
-                }
-            });
+                });
 
-            // Benachrichtung anzeigen
-            ons.notification.toast({
-                buttonLabel: 'Ok',
-                message: 'Herzlichen Willkommen, ' + user.firstName + ' ' + user.familyName + '! <br/> Die Zeiterfassung wurde am ' + now.toLocaleDateString() + ' um ' + now.toLocaleTimeString() + ' Uhr gestoppt.',
-                timeout: 10000
-            });
-        } else {
-            // Neue Arbeitszeit anlegen
-            await LocalDB.localWorkingTimes.add({
-                userId: user._id,
-                start: {
-                    time: now,
-                    location: location
-                },
-                createdAt: now,
-                updatedAt: now
-            });
+                // Benachrichtung anzeigen
+                ons.notification.toast({
+                    buttonLabel: 'Ok',
+                    message: 'Herzlichen Willkommen, ' + user.firstName + ' ' + user.familyName + '! <br/> Die Zeiterfassung wurde am ' + now.toLocaleDateString() + ' um ' + now.toLocaleTimeString() + ' Uhr beendet.',
+                    timeout: 10000
+                });
+            } else {
+                // Neue Arbeitszeit anlegen
+                await LocalDB.localWorkingTimes.add({
+                    userId: user._id,
+                    start: {
+                        time: now,
+                        location: location
+                    },
+                    createdAt: now,
+                    updatedAt: now
+                });
 
-            // Speichere Startzeit, um diese an die Datenbank zu schicken
-            postBody.start = now;
+                // Speichere Startzeit, um diese an die Datenbank zu schicken
+                postBody.start = now;
 
-            // Benachrichtung anzeigen
-            ons.notification.toast({
-                buttonLabel: 'Ok',
-                message: 'Herzlichen Willkommen, ' + user.firstName + ' ' + user.familyName + '! <br/> Die Zeiterfassung wurde am ' + now.toLocaleDateString() + ' um ' + now.toLocaleTimeString() + ' Uhr gestartet.',
-                timeout: 10000
-            });
+                // Benachrichtung anzeigen
+                ons.notification.toast({
+                    buttonLabel: 'Ok',
+                    message: 'Herzlichen Willkommen, ' + user.firstName + ' ' + user.familyName + '! <br/> Die Zeiterfassung wurde am ' + now.toLocaleDateString() + ' um ' + now.toLocaleTimeString() + ' Uhr gestartet.',
+                    timeout: 10000
+                });
+            }
         }
 
         // Vibration mit Pattern, Quelle: https://whatwebcando.today/vibration.html
@@ -192,10 +195,26 @@ export default class Terminal extends Component {
             postBody.longitude = location.coordinates[0];
             postBody.latitude = location.coordinates[1];
         }
+
         // Request an die API, um die Daten persistent zu speichern
         // Falls der Request nicht funktioniert, weil keine Internetverbindung besteht, soll der Service Worker diesen Request
         // zur Background Sync Queue hinzufügen, um den Request später zu verarbeiten
-        API.getInstance()._fetch('/working-times', 'POST', postBody);
+        API.getInstance()._fetch('/working-times', 'POST', postBody).then( response => {
+            if (response.status === 'success') {
+                const workingTime = response.data.workingTime;
+                const time = new Date( (workingTime.end ? workingTime.end.time : workingTime.start.time) ),
+                    timeTracking = workingTime.end === undefined;
+
+                // Benachrichtung anzeigen
+                ons.notification.toast({
+                    buttonLabel: 'Ok',
+                    message: 'Herzlichen Willkommen, ' + user.firstName + ' ' + user.familyName + '! <br/> Die Zeiterfassung wurde am ' + time.toLocaleDateString() + ' um ' + time.toLocaleTimeString() + ' Uhr ' + (timeTracking ? 'gestartet' : 'beendet') + '.',
+                    timeout: 3000
+                });
+
+                this.updateWorkingTimes();
+            }
+        });
 
         // Wenn alles fertig ist, resette Login Formular
         this.setState({

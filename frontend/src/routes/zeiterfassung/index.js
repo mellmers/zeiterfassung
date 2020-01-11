@@ -22,13 +22,7 @@ export default class Zeiterfassung extends Component {
 
     componentWillMount() {
         if (navigator.onLine) {
-            API.getInstance()._fetch('/working-times')
-                .then(response => {
-                    if (response.status === 'success') {
-                        LocalDB.localWorkingTimes.clear();
-                        LocalDB.localWorkingTimes.bulkPut(response.data.workingTimes).then(this.updateStateWithDataFromLocalDB.bind(this));
-                    }
-                });
+            this.updateWorkingTimes();
         } else {
             // Falls keine Verbindung besteht, dann nehme Daten aus der LocalDB und setze Arbeitszeiten in den state
             this.updateStateWithDataFromLocalDB();
@@ -123,81 +117,103 @@ export default class Zeiterfassung extends Component {
 
         requestNotificationPermission();
 
-        if (timeTracking) {
-            // Update vorhandene Arbeitszeit
-            await LocalDB.localWorkingTimes.where({ userId: currentUser._id }).reverse().toArray().then(async workingTimes => {
-                for (let key in workingTimes) {
-                    if (!workingTimes[key].hasOwnProperty('end')) {
-                        await LocalDB.localWorkingTimes.update(workingTimes[key].id, {
-                            end: {
-                                time: now,
-                                location: location
-                            },
-                            updatedAt: now
-                        });
+        // Falls keine Verbindung besteht, setze Arbeitszeit basierend auf den Daten in der LocalDB
+        if (!navigator.onLine) {
+            if (timeTracking) {
+                // Update vorhandene Arbeitszeit
+                await LocalDB.localWorkingTimes.where({ userId: currentUser._id }).reverse().toArray().then(async workingTimes => {
+                    for (let key in workingTimes) {
+                        if (!workingTimes[key].hasOwnProperty('end')) {
+                            await LocalDB.localWorkingTimes.update(workingTimes[key].id, {
+                                end: {
+                                    time: now,
+                                    location: location
+                                },
+                                updatedAt: now
+                            });
 
-                        // Speichere Endzeit, um diese an die Datenbank zu schicken
-                        postBody.end = now;
+                            // Speichere Endzeit, um diese an die Datenbank zu schicken
+                            postBody.end = now;
 
-                        break;
+                            break;
+                        }
                     }
-                }
-            });
+                });
 
-            // Benachrichtung anzeigen
-            ons.notification.toast({
-                buttonLabel: 'Ok',
-                message: 'Zeiterfassung beendet am ' + now.toLocaleDateString() + ' um ' + now.toLocaleTimeString(),
-                timeout: 3000
-            });
-        } else {
-            // Neue Arbeitszeit anlegen
-            await LocalDB.localWorkingTimes.add({
-                userId: currentUser._id,
-                start: {
-                    time: now,
-                    location: location
-                },
-                createdAt: now,
-                updatedAt: now
-            });
+                // Benachrichtung anzeigen
+                ons.notification.toast({
+                    buttonLabel: 'Ok',
+                    message: 'Zeiterfassung beendet am ' + now.toLocaleDateString() + ' um ' + now.toLocaleTimeString(),
+                    timeout: 3000
+                });
+            } else {
+                // Neue Arbeitszeit anlegen
+                await LocalDB.localWorkingTimes.add({
+                    userId: currentUser._id,
+                    start: {
+                        time: now,
+                        location: location
+                    },
+                    createdAt: now,
+                    updatedAt: now
+                });
 
-            // Speichere Startzeit, um diese an die Datenbank zu schicken
-            postBody.start = now;
+                // Speichere Startzeit, um diese an die Datenbank zu schicken
+                postBody.start = now;
 
-            // Benachrichtung anzeigen
-            ons.notification.toast({
-                buttonLabel: 'Ok',
-                message: 'Zeiterfassung gestartet am ' + now.toLocaleDateString() + ' um ' + now.toLocaleTimeString(),
-                timeout: 3000
-            });
+                // Benachrichtung anzeigen
+                ons.notification.toast({
+                    buttonLabel: 'Ok',
+                    message: 'Zeiterfassung gestartet am ' + now.toLocaleDateString() + ' um ' + now.toLocaleTimeString(),
+                    timeout: 3000
+                });
+            }
+
+            // Update state
+            this.updateStateWithDataFromLocalDB();
         }
 
         // Vibration mit Pattern, Quelle: https://whatwebcando.today/vibration.html
         if (navigator.vibrate) navigator.vibrate([100, 200, 200, 200]);
-
-        // Update state
-        this.updateStateWithDataFromLocalDB();
 
         // Speichere Location, um diese an die Datenbank zu schicken
         if (location) {
             postBody.longitude = location.coordinates[0];
             postBody.latitude = location.coordinates[1];
         }
+
         // Request an die API, um die Daten persistent zu speichern
         // Falls der Request nicht funktioniert, weil keine Internetverbindung besteht, soll der Service Worker diesen Request
         // zur Background Sync Queue hinzufügen, um den Request später zu verarbeiten
-        API.getInstance()._fetch('/working-times', 'POST', postBody);
+        API.getInstance()._fetch('/working-times', 'POST', postBody).then( response => {
+            if (response.status === 'success') {
+                const workingTime = response.data.workingTime;
+                const time = new Date( (workingTime.end ? workingTime.end.time : workingTime.start.time) ),
+                    timeTracking = workingTime.end === undefined;
+
+                // Benachrichtung anzeigen
+                ons.notification.toast({
+                    buttonLabel: 'Ok',
+                    message: 'Zeiterfassung ' + (timeTracking ? 'gestartet' : 'beendet') + ' am ' + time.toLocaleDateString() + ' um ' + time.toLocaleTimeString() + ' Uhr',
+                    timeout: 3000
+                });
+
+                this.updateWorkingTimes();
+            }
+        });
     }
 
     // Hole Arbeitszeiten aus der LocalDB, sortiere die Daten nach Startzeit und update den state
     updateStateWithDataFromLocalDB() {
         LocalDB.localWorkingTimes.where({ userId: this.props.currentUser._id }).reverse().sortBy('start.time').then( workingTimes => {
-            let timeTracking = false;
+            // Timer zurücksetzen
+            clearInterval(this.interval);
+            this.setState({ timer: null });
 
             // Arbeitszeiten nach Eintrag ohne 'end'-Date durchsuchen
             // Wenn es eine Zeit gibt, dann muss der Timer aktiviert werden
             // und der state 'timeTracking' muss auf true gesetzt werden
+            let timeTracking = false;
             for (let key in workingTimes) {
                 if (!workingTimes[key].hasOwnProperty('end')) {
                     const startTime = new Date(workingTimes[key].start.time);
@@ -211,18 +227,22 @@ export default class Zeiterfassung extends Component {
                 }
             }
 
-            // Wenn die Zeit nicht läuft, dann deaktiviere den Timer aus
-            if (!timeTracking) {
-                clearInterval(this.interval);
-                this.setState({ timer: null });
-            }
-
             // Update state
             this.setState({
                 workingTimes: workingTimes,
                 timeTracking: timeTracking
             });
         });
+    }
+
+    updateWorkingTimes() {
+        API.getInstance()._fetch('/working-times')
+            .then(response => {
+                if (response.status === 'success') {
+                    LocalDB.localWorkingTimes.clear();
+                    LocalDB.localWorkingTimes.bulkPut(response.data.workingTimes).then(this.updateStateWithDataFromLocalDB.bind(this));
+                }
+            });
     }
 
     renderTimer() {
