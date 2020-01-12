@@ -23,7 +23,6 @@ export default class WorkingTimesTable extends Component {
             return 0;
         });
 
-        console.log(workingTimes);
         return (
             <table className={styles.workingTimesTable + (position && position === 'center' ? ' ' + styles.positionCenter : '')} cellspacing='10'>
                 <thead>
