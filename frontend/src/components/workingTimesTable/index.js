@@ -10,6 +10,20 @@ export default class WorkingTimesTable extends Component {
 
         if (workingTimes === undefined || workingTimes === null || workingTimes.length <= 0) return <p style={(position && position === 'center' ? { textAlign: 'center' } : null)}>Keine Arbeitszeitdaten vorhanden</p>;
 
+        // Arbeitszeiten nach Startzeit sortieren, Quelle: https://www.sitepoint.com/sort-an-array-of-objects-in-javascript/
+        workingTimes.sort((a, b) => {
+            const timeA = new Date(a.start.time).getTime();
+            const timeB = new Date(b.start.time).getTime();
+
+            if (timeA < timeB) {
+                return 1;
+            } else if (timeA > timeB) {
+                return -1;
+            }
+            return 0;
+        });
+
+        console.log(workingTimes);
         return (
             <table className={styles.workingTimesTable + (position && position === 'center' ? ' ' + styles.positionCenter : '')} cellspacing='10'>
                 <thead>
