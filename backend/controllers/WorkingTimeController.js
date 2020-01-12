@@ -38,7 +38,7 @@ async function toggleTracking(req, res, next) {
                     status: 'error',
                     message: 'Arbeitszeit kann nicht erstellt werden. Grund: ' + err.message || err.errmsg
                 });
-            } else if (foundWT && foundWT.length === 1) {
+            } else if (foundWT && foundWT.length > 0) {
                 // Update entry
 
                 let wT = foundWT[0];
