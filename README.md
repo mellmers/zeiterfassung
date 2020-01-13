@@ -22,7 +22,7 @@ könnte auch jeder Mitarbeiter das Terminal ausloggen, wenn solch ein Knopf exis
 * [node.js / npm](https://nodejs.org/en/)
 * [mongodb](https://www.mongodb.com/)
 
-(Entwickelt und getestet mit Windows 10)
+(Entwickelt und getestet mit Windows 10, Node.js v12.13.0 , npm 6.13.4 und MongoDB 4.2 Community Edition)
 
 ### Installation und starten der Anwendung
 Schritt 1 ist überflüssig, wenn der Quellcode bereits vorliegt (z.B. gezippte Dateien bereits entpackt).
@@ -32,7 +32,8 @@ Schritt 1 ist überflüssig, wenn der Quellcode bereits vorliegt (z.B. gezippte 
 git clone https://github.com/mellmers/zeiterfassung.git zeiterfassung && cd zeiterfassung
 ```
   
-Schritt 2 ist überflüssig, wenn der Ordner 'node_modules' unterhalb der Verzeichnisse 'backend' und 'frontend' existieren.
+Schritt 2 ist überflüssig, wenn der Ordner 'node_modules' unterhalb der Verzeichnisse 'backend' und 'frontend' existiert.
+Sollte es Probleme beim Starten der Anwendung geben, dann löschen Sie die Ordner 'node_modules' und führen Sie Schritt aus.
 
 ##### 2. Installiere alle Abhängigkeiten
 ```bash
