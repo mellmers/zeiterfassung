@@ -66,21 +66,21 @@ function createDefaultUser() {
                 {
                     familyName: 'Terminal',
                     firstName: 'Demo',
-                    pinCode: bcrypt.hashSync('1111', 10),
+                    pinCode: bcrypt.hashSync('1234', 10),
                     role: 'Terminal'
                 },
                 {
                     familyName: 'Admin',
                     firstName: 'Demo',
                     invitationId: generateUUIDVersion4(),
-                    pinCode: bcrypt.hashSync('2222', 10),
+                    pinCode: bcrypt.hashSync('1234', 10),
                     role: 'Administrator'
                 },
                 {
                     familyName: 'Mitarbeiter',
                     firstName: 'Demo',
                     invitationId: generateUUIDVersion4(),
-                    pinCode: bcrypt.hashSync('3333', 10),
+                    pinCode: bcrypt.hashSync('1234', 10),
                     role: 'Mitarbeiter'
                 }
             ];

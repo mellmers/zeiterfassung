@@ -75,9 +75,9 @@ npm run start:development
 ##### 5. Login
 Damit man sich sofort und ohne Registrierung (diese Funktion wurde aus Zeitgründen weggelassen) einloggen kann,
 werden beim ersten Start der API folgende Benutzer angelegt:
-* Terminal - Personalnummer (PN): 1, PIN: 1111
-* Demo Admin – PN: 2, PIN: 2222
-* Demo Mitarbeiter – PN: 3, PIN: 3333
+* Terminal - Personalnummer (PN): 1, PIN: 1234
+* Demo Admin – PN: 2, PIN: 1234
+* Demo Mitarbeiter – PN: 3, PIN: 1234
 
 ## Installation auf einem Webserver
 Hier wird beschrieben, wie die Anwendung auf einem Webserver installiert werden könnte.
