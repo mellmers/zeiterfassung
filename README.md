@@ -35,6 +35,8 @@ git clone https://github.com/mellmers/zeiterfassung.git zeiterfassung && cd zeit
 Schritt 2 ist überflüssig, wenn der Ordner 'node_modules' unterhalb der Verzeichnisse 'backend' und 'frontend' existiert.
 Sollte es Probleme beim Starten der Anwendung geben, dann löschen Sie die Ordner 'node_modules' und führen Sie Schritt aus.
 
+**Achtung:** Die Installation konnte nur mit node v14.20.0 (npm v6.14.17) positiv durchgeführt. Ab Node v16.17.0 (npm 8.15.0) funktioniert die Installation leider nicht. Andere Versionen sind nicht getestet!
+
 ##### 2. Installiere alle Abhängigkeiten
 ```bash
 # Backend
